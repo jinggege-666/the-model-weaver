@@ -11,11 +11,25 @@
 
     onMount(async () => {
 
+        // Wait for work item loading from JSON file to complete
+        await dataState.workData;
+
         let counter = 0;
         let length = $imgPromises.length;
 
-        // Wait for work item loading from JSON file to complete
-        await dataState.workData;
+        const finish = () => {
+            waitForElementTransition(loader).then(() => {
+                loadingDone = true;
+                loadingPercentage = 0;
+                // Once outro animation is complete, resolve page loading promise, allowing intro animations to begin
+                waitForElementTransition(loader).then(() => {
+                    loaderAnimationResolve();
+                });
+            });
+        };
+
+        // If there are no images queued, finish immediately (avoid stuck black loader)
+        if (length === 0) { finish(); return; }
 
         // Calculate percentage by how many images have loaded
         $imgPromises.forEach(async (promise) => {
@@ -25,17 +39,12 @@
 
             // If loading is complete, initiate outro animation
             if (loadingPercentage > 99) {
-                waitForElementTransition(loader).then(() => {
-                    loadingDone = true;
-                    loadingPercentage = 0;
-
-                    // Once outro animation is complete, resolve page loading promise, allowing intro animations to begin
-                    waitForElementTransition(loader).then(() => {
-                        loaderAnimationResolve();
-                    });
-                });
+                finish();
             }
         });
+
+        // Safety fallback: never leave the loader stuck
+        setTimeout(() => { loadingPercentage = 100; finish(); }, 6000);
     });
 
 </script>
