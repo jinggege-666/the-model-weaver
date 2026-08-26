@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { goto } from "$app/navigation";
+	import { resolve } from "$app/paths";
 
 	let fade = $state(false);
 	onMount(() => { setTimeout(() => (fade = true), 50); });
@@ -10,7 +11,7 @@
 
 <div class="page" class:fade>
 	<div class="inner">
-		<button class="back" onclick={() => goto("/")}>← 返回首页</button>
+		<button class="back" onclick={() => goto(resolve("/"))}>← 返回首页</button>
 		<div class="badge">THE MODEL WEAVER · CONTACT</div>
 		<h1>联系<span>我</span></h1>
 		<p class="tag">随时来找我聊聊 · 算法与艺术</p>
