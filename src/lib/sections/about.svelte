@@ -234,22 +234,22 @@
 
 	@media only screen and (max-width: 950px)
 		#content-container.about
-			flex-direction: column
-			justify-content: flex-start
-			padding: 0 5vw
+			flex-direction: column !important
+			justify-content: flex-start !important
+			padding: 0 5vw !important
 		#content-container.about .content-wrapper
-			width: 100%
-			margin: 0
-			padding: 0
+			width: 100% !important
+			margin: 0 !important
+			padding: 0 !important
 			position: relative
 			z-index: 2
 		#content-container.about .profile-image
-			display: block
-			width: 100%
-			margin: 30px 0 0
+			display: block !important
+			width: 100% !important
+			margin: 30px 0 0 !important
 			img
-				width: 100%
-				height: auto
+				width: 100% !important
+				height: auto !important
 				border-radius: 1vh
 
 .horizontal-flex
