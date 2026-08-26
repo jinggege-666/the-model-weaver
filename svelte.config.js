@@ -10,7 +10,9 @@ const config = {
 	kit: {
 		// Static SPA build for GitHub Pages (output to /docs so it can be served from a branch)
 		adapter: adapter({ fallback: 'index.html', pages: 'docs' }),
-		prerender: { entries: [] }
+		prerender: { entries: [] },
+		// base: deploy uses BASE_PATH (e.g. /the-model-weaver); local stays root
+		paths: { base: process.env.BASE_PATH || '' }
 	}
 };
 
