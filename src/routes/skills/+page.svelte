@@ -78,11 +78,7 @@
 	.head { text-align:center; padding:20px 0 34px; position:relative; }
 	.back { position:absolute; left:0; top:24px; background:transparent; border:1px solid #2a2a2e; color:#a7a7ad; border-radius:999px; padding:7px 16px; cursor:pointer; font-size:14px; }
 	.back:hover { color:#f2f2f2; border-color:#555; }
-	@media only screen and (max-width: 950px)
-		.back
-			position: static
-			margin: 0 auto 18px
-			display: block
+	@media only screen and (max-width: 950px) { .back { position: static; margin: 0 auto 18px; display: block; } }
 	.badge { display:inline-block; border:1px solid #2a2a2e; border-radius:999px; padding:6px 16px; font-size:13px; color:#a7a7ad; letter-spacing:.12em; margin-bottom:22px; }
 	h1 { font-family:"Songti SC",serif; font-size:clamp(34px,6vw,64px); font-weight:700; line-height:1.08; }
 	h1 span { background:linear-gradient(90deg,#7c8cff,#ff7c9b); -webkit-background-clip:text; background-clip:text; color:transparent; }
