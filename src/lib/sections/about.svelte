@@ -234,15 +234,17 @@
 	@media only screen and (max-width: 950px)
 		#content-container.about
 			flex-direction: column
-		.profile-image
+		#content-container.about .content-wrapper
+			position: relative
+			z-index: 2
+		#content-container.about .profile-image
 			display: block
 			width: 100%
-			margin: 40px auto 0
+			margin: -14vh auto 0
 			img
 				width: 100%
 				height: auto
 				border-radius: 1vh
-				object-fit: cover
 
 .horizontal-flex
 	display: flex
