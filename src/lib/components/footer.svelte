@@ -5,6 +5,7 @@
     import { loadPagePromise } from "$lib/store";
     import { onScrolledIntoView } from "$lib/utils";
     import { dataState } from "$lib/state.svelte";
+    import { base } from "$app/paths";
 
     let footerContainerElement: HTMLElement = $state()!
     let logoElement: HTMLElement = $state()!; 
@@ -99,7 +100,7 @@
                     </p>
                 {/if}
             {/if}
-            <a class="large-text" bind:this={fullEmailLinkElement} href="/contact" style="text-decoration:none">1776244949@qq.com</a>
+            <a class="large-text" bind:this={fullEmailLinkElement} href={base + "/contact"} style="text-decoration:none">1776244949@qq.com</a>
         </div>
         
         <div class="credits-wrapper" bind:this={creditsElement}>

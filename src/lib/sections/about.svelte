@@ -5,6 +5,7 @@
 	import { letterSlideIn, maskSlideIn } from "$lib/animations";
 	import { loadImage, onScrolledIntoView } from "$lib/utils";
     import { scrollAnchorState, viewPortState } from "$lib/state.svelte";
+	import { base } from "$app/paths";
 
 	let section1Element: HTMLElement;
 	let section2Element: HTMLElement;
@@ -59,7 +60,7 @@
 			</div>
 			<div class="social-button-wrapper">
 				<div in:maskSlideIn={{ delay: 400, reverse: true }}>
-					<span class="button no-underline"><a href="/contact" class="clickable sublink link">邮箱</a></span>
+					<span class="button no-underline"><a href={base + "/contact"} class="clickable sublink link">邮箱</a></span>
 				</div>
 				<div in:maskSlideIn={{ delay: 700, reverse: true }}>
 					<span class="button clickable sublink link no-underline">微信 · w18260301305</span>
@@ -190,7 +191,8 @@
 					font-size: 25vw !important
 
 		h1
-			font-size: 20vh
+			font-size: 11vh
+			line-height: 1.15
 			font-weight: 400
 
 		.paragraph
