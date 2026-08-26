@@ -1,9 +1,16 @@
 import { imgPromises } from "./store";
+import { base } from "$app/paths";
+
+// Prefix asset/data paths with the base path (for GitHub Pages subpath deployment)
+function withBase(p: string) {
+	const clean = p.startsWith("/") ? p : "/" + p;
+	return base + clean; // base is '' locally, '/the-model-weaver' in prod
+}
 
 // Load images asynchronously during page loading animation
 export async function loadImage(src: string) {
     const promise =  new Promise(async (resolve: (src: string) => void, reject) => {
-        const blob = await (await fetch(src)).blob();
+        const blob = await (await fetch(withBase(src))).blob();
         const reader = new FileReader();
         reader.readAsDataURL(blob);
         reader.onload = () => resolve(reader.result as string);
@@ -16,7 +23,7 @@ export async function loadImage(src: string) {
 
 export function fetchJsonData(sourceFile: string) {
     return new Promise(async (resolve: (data: any) => void) => {
-        const request = await fetch(sourceFile);
+        const request = await fetch(withBase(sourceFile));
         const data = await request.json();
         resolve(data);
     });

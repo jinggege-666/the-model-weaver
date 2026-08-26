@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { goto } from "$app/navigation";
+	import { base } from "$app/paths";
 
 	let fade = $state(false);
 	onMount(() => { setTimeout(() => (fade = true), 50); });
@@ -16,7 +17,7 @@
 	];
 
 	function imgOf(slug: string, i: number) {
-		return `/assets/imgs/design/interior/${slug}/img-${String(i + 1).padStart(2, "0")}.jpg`;
+		return base + `/assets/imgs/design/interior/${slug}/img-${String(i + 1).padStart(2, "0")}.jpg`;
 	}
 	function countOf(index: number) { return projects[index].count; }
 	function openAlbum(i: number) { album = { index: i, cur: 0 }; }
