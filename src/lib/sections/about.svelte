@@ -188,7 +188,8 @@
 				width: 80%
 
 				h1
-					font-size: 25vw !important
+					font-size: 8vh !important
+					line-height: 1.15
 
 		h1
 			font-size: 11vh
@@ -234,13 +235,18 @@
 	@media only screen and (max-width: 950px)
 		#content-container.about
 			flex-direction: column
+			justify-content: flex-start
+			padding: 0 5vw
 		#content-container.about .content-wrapper
+			width: 100%
+			margin: 0
+			padding: 0
 			position: relative
 			z-index: 2
 		#content-container.about .profile-image
 			display: block
 			width: 100%
-			margin: -14vh auto 0
+			margin: 30px 0 0
 			img
 				width: 100%
 				height: auto
