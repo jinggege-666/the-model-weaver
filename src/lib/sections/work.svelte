@@ -8,6 +8,7 @@
 	import { loadPagePromise } from "$lib/store";
 	import { dataState, scrollAnchorState, viewPortState, workScrollState } from "$lib/state.svelte";
 	import { loadImage, onScrolledIntoView } from "$lib/utils";
+	import { base } from "$app/paths";
 
 
 	let workContainer: HTMLElement;
@@ -274,7 +275,7 @@
 						<div in:maskSlideIn={{ reverse: true }} out:maskSlideOut>
 							<div class="links">
 								{#each dataState.workData![currentActive].links as link}
-									<a href={link.link} target={link.link.startsWith("http") ? "_blank" : "_self"} class="button">{link.text}</a>
+									<a href={link.link.startsWith("http") ? link.link : base + link.link} target={link.link.startsWith("http") ? "_blank" : "_self"} class="button">{link.text}</a>
 								{/each}
 							</div>
 						</div>

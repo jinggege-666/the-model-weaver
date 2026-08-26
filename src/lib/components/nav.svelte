@@ -4,6 +4,7 @@
 	import { loadPagePromise } from "$lib/store";
 	import { maskSlideIn } from "$lib/animations";
 	import { browser } from "$app/environment";
+	import { base } from "$app/paths";
     import { scrollAnchorState } from "$lib/state.svelte";
 	interface Props {
 		// Scroll container to allow scrolling when anchors are clicked
@@ -96,13 +97,13 @@
 							</button>
 						</li>
 						<li use:introAnimation={{ delay: 1300 }}>
-							<a href="/skills" class="clickable" in:mobileTransitionSwitcher={{ delay: 350 }}>技能</a>
+							<a href={base + "/skills"} class="clickable" in:mobileTransitionSwitcher={{ delay: 350 }}>技能</a>
 						</li>
 						<li class="mobile">
-							<a href="/contact" class="clickable" in:mobileTransitionSwitcher={{ delay: 350 }}>联系</a>
+							<a href={base + "/contact"} class="clickable" in:mobileTransitionSwitcher={{ delay: 350 }}>联系</a>
 						</li>
 						<li use:introAnimation={{ delay: 1300 }}>
-							<a href="/contact" class="clickable" in:mobileTransitionSwitcher={{ delay: 400 }}>邮箱</a>
+							<a href={base + "/contact"} class="clickable" in:mobileTransitionSwitcher={{ delay: 400 }}>邮箱</a>
 						</li>
 					{/key}
 				</ul>
