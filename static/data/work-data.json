@@ -1,0 +1,57 @@
+[
+    {
+        "id": "marymount",
+        "title": "设计作品",
+        "details": {
+            "description": "进入我的设计作品，看看室内设计与工业设计。",
+            "summary": "设计作品"
+        },
+        "roles": [
+            "设计"
+        ],
+        "links": [
+            {
+                "type": "web",
+                "text": "进入我的设计作品",
+                "link": "/design"
+            }
+        ]
+    },
+    {
+        "id": "lcml",
+        "title": "摄影作品",
+        "details": {
+            "description": "光与影的 AI 摄影实验，让模型读懂真实世界的质感与情绪。",
+            "summary": "摄影作品"
+        },
+        "roles": [
+            "摄影",
+            "AI 后期"
+        ],
+        "links": [
+            {
+                "type": "web",
+                "text": "进入作品集",
+                "link": "https://wswjj188611-cmyk.github.io/JINGE/"
+            }
+        ]
+    },
+    {
+        "id": "v1",
+        "title": "skill",
+        "details": {
+            "description": "进入我的 skill，看看我为 AI 训练师打磨的提效技能。",
+            "summary": "AI 技能"
+        },
+        "roles": [
+            "AI 训练"
+        ],
+        "links": [
+            {
+                "type": "web",
+                "text": "进入我的 skill",
+                "link": "/skills"
+            }
+        ]
+    }
+]
