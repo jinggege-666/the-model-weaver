@@ -8,8 +8,8 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		// Static SPA build for GitHub Pages
-		adapter: adapter({ fallback: 'index.html' }),
+		// Static SPA build for GitHub Pages (output to /docs so it can be served from a branch)
+		adapter: adapter({ fallback: 'index.html', pages: 'docs' }),
 		prerender: { entries: [] }
 	}
 };
