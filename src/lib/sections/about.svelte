@@ -232,24 +232,51 @@
 					margin-left: 5vw
 
 
-	@media only screen and (max-width: 950px)
-		#content-container.about
-			flex-direction: column !important
-			justify-content: flex-start !important
-			padding: 0 5vw !important
-		#content-container.about .content-wrapper
-			width: 100% !important
-			margin: 0 !important
-			padding: 0 !important
+
+// On phones, keep the biography readable and place the complete portrait below it.
+// This media query must stay at the root level; nesting it inside .content-wrapper
+// would prevent the selectors from matching #content-container.about.
+@media only screen and (max-width: 950px)
+	#content-container.about
+		flex-direction: column
+		justify-content: flex-start
+		padding: 0 6vw 6vh
+		overflow: visible
+
+		.content-wrapper
+			width: 100%
+			height: auto
+			margin: 0
+			padding: 0
+
+			h1
+				font-size: clamp(52px, 16vw, 72px) !important
+				line-height: 1.02
+
+			.paragraph
+				width: 100%
+				margin: 6vh 0 0
+				font-size: clamp(14px, 3.8vw, 18px) !important
+
+				&::before
+					display: none
+
+			.social-button-wrapper
+				margin: 4vh 0 0
+
+		.profile-image
+			display: block
+			width: 100%
+			margin: 6vh 0 0
 			position: relative
-			z-index: 2
-		#content-container.about .profile-image
-			display: block !important
-			width: 100% !important
-			margin: 30px 0 0 !important
+			transform: none !important
+			overflow: hidden
+
 			img
-				width: 100% !important
-				height: auto !important
+				display: block
+				width: 100%
+				height: auto
+				object-fit: contain
 				border-radius: 1vh
 
 .horizontal-flex
