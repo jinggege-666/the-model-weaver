@@ -157,7 +157,7 @@
 					</div>
 				</h1>
 				<div class="occupation mask">
-					<p class = "paragraph" bind:this={shortDetailsElement} style="white-space: nowrap">
+					<p class = "paragraph" bind:this={shortDetailsElement}>
 						来自中国盐城的 AI 训练师 & 产品设计师
 					</p>
 				</div>
@@ -338,7 +338,15 @@
 
 @media only screen and (max-width: 750px)
 	.occupation
-		width: 70%
+		width: 100%
+		overflow: visible !important
+
+		.paragraph
+			width: 100% !important
+			max-width: 100%
+			white-space: normal
+			font-size: clamp(14px, 3.8vw, 17px) !important
+			line-height: 1.5 !important
 
 
 #signature

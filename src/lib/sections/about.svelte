@@ -51,7 +51,7 @@
 	{#await sectionOnePromise then _}
 		<div class="content-wrapper">
 			<h1 class="title" use:titleIn>
-				你好，我是<br>the model weaver
+				你好，我是<br>jinge
 			</h1>
 			<div in:maskSlideIn={{ duration: 1200, reverse: true, delay: 150 }}>
 				<p class="paragraph">
