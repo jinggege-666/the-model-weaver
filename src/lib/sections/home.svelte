@@ -150,14 +150,14 @@
 			<div class="flex-wrapper second">
 				<h1 class = "title">
 					<div class="title-mask">
-						<div class="word" bind:this={titleWord1Element}>Model</div>
+						<div class="word" bind:this={titleWord1Element}>JINGE</div>
 					</div><br> 
 					<div class="title-mask">
-						<div class="word" bind:this={titleWord2Element}>Weaver</div>
+						<div class="word" bind:this={titleWord2Element}></div>
 					</div>
 				</h1>
 				<div class="occupation mask">
-					<p class = "paragraph" bind:this={shortDetailsElement} style="white-space: nowrap">
+					<p class = "paragraph" bind:this={shortDetailsElement}>
 						来自中国盐城的 AI 训练师 & 产品设计师
 					</p>
 				</div>

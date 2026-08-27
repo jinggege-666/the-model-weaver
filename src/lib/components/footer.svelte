@@ -106,7 +106,7 @@
         <div class="credits-wrapper" bind:this={creditsElement}>
             <p class="year">© {currentYear}</p>
             <p class="credits">
-                由 The Model Weaver 设计开发<br>
+                由 JINGE 设计开发<br>
                 
                 <!-- Support the project by keeping this line in your fork -->
                 <a class="clickable button no-decor" href="https://github.com/Musab-Hassan/musabhassan.com" target="_blank">
