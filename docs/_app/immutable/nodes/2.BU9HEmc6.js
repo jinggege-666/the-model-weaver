@@ -1,0 +1,1 @@
+import{it as e}from"../chunks/vHyRoMUX.js";import{t}from"../chunks/BtvvWqu2.js";var n=e({ssr:()=>!1});export{t as component,n as universal};
