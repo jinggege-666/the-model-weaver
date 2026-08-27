@@ -5,6 +5,21 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Expires" content="0">
+	<script>
+		// WeChat's in-app browser can keep an old GitHub Pages shell for a long time.
+		// Give this release a stable cache-busting URL before the app starts.
+		(() => {
+			const release = 'jinge-20260827-3';
+			const url = new URL(window.location.href);
+			if (url.searchParams.get('v') !== release) {
+				url.searchParams.set('v', release);
+				window.location.replace(url.toString());
+			}
+		})();
+	</script>
 
 	<title>JINGE — AI Trainer & Product Designer</title>
 
@@ -24,10 +39,10 @@
 	<meta http-equiv="content-type" content="text/html" charset="UTF-8">
 	<meta name="description" content="Portfolio and personal website of JINGE, an AI trainer and product designer from Yancheng, China.">
 
-	<link href="/the-model-weaver/_app/immutable/entry/start.DNaCdqUE.js" rel="modulepreload">
-		<link href="/the-model-weaver/_app/immutable/chunks/4rCPRCHo.js" rel="modulepreload">
+	<link href="/the-model-weaver/_app/immutable/entry/start.CEtZ46kk.js" rel="modulepreload">
+		<link href="/the-model-weaver/_app/immutable/chunks/CnfXdBwx.js" rel="modulepreload">
 		<link href="/the-model-weaver/_app/immutable/chunks/vHyRoMUX.js" rel="modulepreload">
-		<link href="/the-model-weaver/_app/immutable/entry/app.CQ1LSqNN.js" rel="modulepreload">
+		<link href="/the-model-weaver/_app/immutable/entry/app.Ct7jqOfy.js" rel="modulepreload">
 		<link href="/the-model-weaver/_app/immutable/chunks/DYl5dUZ5.js" rel="modulepreload">
 		<link href="/the-model-weaver/_app/immutable/chunks/xihTtKlq.js" rel="modulepreload">
 		<link href="/the-model-weaver/_app/immutable/nodes/0.BPlbzPOE.js" rel="modulepreload">
@@ -39,7 +54,7 @@
 		
 			<script>
 				{
-					__sveltekit_aa59ud = {
+					__sveltekit_l6h84a = {
 						base: "/the-model-weaver",
 						assets: "/the-model-weaver"
 					};
@@ -47,8 +62,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("/the-model-weaver/_app/immutable/entry/start.DNaCdqUE.js"),
-						import("/the-model-weaver/_app/immutable/entry/app.CQ1LSqNN.js")
+						import("/the-model-weaver/_app/immutable/entry/start.CEtZ46kk.js"),
+						import("/the-model-weaver/_app/immutable/entry/app.Ct7jqOfy.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element);
 					});
