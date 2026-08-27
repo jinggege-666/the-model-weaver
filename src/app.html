@@ -12,7 +12,7 @@
 		// WeChat's in-app browser can keep an old GitHub Pages shell for a long time.
 		// Give this release a stable cache-busting URL before the app starts.
 		(() => {
-			const release = 'jinge-20260827-3';
+			const release = 'jinge-20260827-4';
 			const url = new URL(window.location.href);
 			if (url.searchParams.get('v') !== release) {
 				url.searchParams.set('v', release);
