@@ -150,10 +150,10 @@
 			<div class="flex-wrapper second">
 				<h1 class = "title">
 					<div class="title-mask">
-						<div class="word" bind:this={titleWord1Element}>Model</div>
+						<div class="word" bind:this={titleWord1Element}>JINGE</div>
 					</div><br> 
 					<div class="title-mask">
-						<div class="word" bind:this={titleWord2Element}>Weaver</div>
+						<div class="word" bind:this={titleWord2Element}></div>
 					</div>
 				</h1>
 				<div class="occupation mask">
