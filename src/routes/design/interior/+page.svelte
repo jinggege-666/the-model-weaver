@@ -45,11 +45,7 @@
 		event.preventDefault();
 		dragX = dx * 0.88;
 	}
-	async function touchEnd(event: TouchEvent) {
-		if (!dragging || animating) return;
-		dragging = false;
-		const dx = event.changedTouches[0].clientX - touchStartX;
-		const dy = event.changedTouches[0].clientY - touchStartY;
+	async function finishSwipe(dx: number, dy: number) {
 		if (Math.abs(dx) < 55 || Math.abs(dx) <= Math.abs(dy)) { dragX = 0; return; }
 		animating = true;
 		const direction = dx < 0 ? 1 : -1;
@@ -64,7 +60,32 @@
 		await new Promise((resolve) => setTimeout(resolve, 260));
 		animating = false;
 	}
+	function touchEnd(event: TouchEvent) {
+		if (!dragging || animating) return;
+		dragging = false;
+		void finishSwipe(event.changedTouches[0].clientX - touchStartX, event.changedTouches[0].clientY - touchStartY);
+	}
 	function touchCancel() { dragging = false; dragX = 0; }
+	function pointerStart(event: PointerEvent) {
+		if (event.pointerType === "touch" || animating) return;
+		touchStartX = event.clientX;
+		touchStartY = event.clientY;
+		dragging = true;
+		(event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+	}
+	function pointerMove(event: PointerEvent) {
+		if (event.pointerType === "touch" || !dragging || animating) return;
+		const dx = event.clientX - touchStartX;
+		const dy = event.clientY - touchStartY;
+		if (Math.abs(dx) <= Math.abs(dy)) return;
+		event.preventDefault();
+		dragX = dx * 0.88;
+	}
+	function pointerEnd(event: PointerEvent) {
+		if (event.pointerType === "touch" || !dragging || animating) return;
+		dragging = false;
+		void finishSwipe(event.clientX - touchStartX, event.clientY - touchStartY);
+	}
 </script>
 
 <svelte:head><title>室内设计 · The Model Weaver</title></svelte:head>
@@ -108,7 +129,7 @@
 	<div class="album">
 		<button class="x" onclick={closeAlbum}>×</button>
 		<button class="nav prev" onclick={prev}>‹</button>
-		<div class="stage" role="group" aria-label="左右滑动切换作品图片" ontouchstart={touchStart} ontouchmove={touchMove} ontouchend={touchEnd} ontouchcancel={touchCancel}>
+		<div class="stage" role="group" aria-label="拖动或滑动切换作品图片" ontouchstart={touchStart} ontouchmove={touchMove} ontouchend={touchEnd} ontouchcancel={touchCancel} onpointerdown={pointerStart} onpointermove={pointerMove} onpointerup={pointerEnd} onpointercancel={touchCancel}>
 			<picture class:dragging style:transform={`translate3d(${dragX}px, 0, 0) scale(${1 - Math.min(Math.abs(dragX) / 9000, 0.035)})`} style:opacity={1 - Math.min(Math.abs(dragX) / 1600, 0.22)}>
 				<source media="(max-width: 700px)" srcset={imgOf(projects[album.index].slug, album.cur, "mobile")}>
 				<img class="main" src={imgOf(projects[album.index].slug, album.cur)} alt={projects[album.index].title} decoding="async" fetchpriority="high" draggable="false">
@@ -135,9 +156,9 @@
 	.page { font-family:"Questrial","PingFang SC","Microsoft YaHei",sans-serif; color:#f2f2f2; min-height:100vh; background:#0e0e10; opacity:0; transform:translateY(14px); transition:opacity .7s ease, transform .7s ease; }
 	.page.fade { opacity:1; transform:none; }
 	.inner { max-width:1100px; margin:0 auto; padding:48px 24px 70px; }
-	.back { background:transparent; border:1px solid #2a2a2e; color:#a7a7ad; border-radius:999px; padding:7px 16px; cursor:pointer; font-size:14px; margin-bottom:26px; }
+	.back { display:block; width:fit-content; background:transparent; border:1px solid #2a2a2e; color:#a7a7ad; border-radius:999px; padding:7px 16px; cursor:pointer; font-size:14px; margin:0 0 26px; }
 	.back:hover { color:#f2f2f2; border-color:#555; }
-	@media only screen and (max-width: 950px) { .back { position: static; margin: 0 auto 18px; display: block; } }
+	@media only screen and (max-width: 950px) { .back { position:static; margin:0 0 18px; } }
 	.badge { display:inline-block; border:1px solid #2a2a2e; border-radius:999px; padding:6px 16px; font-size:13px; color:#a7a7ad; letter-spacing:.12em; margin-bottom:22px; }
 	h1 { font-family:"Songti SC",serif; font-size:clamp(38px,6vw,68px); font-weight:700; line-height:1.06; }
 	h1 span { background:linear-gradient(90deg,#7c8cff,#ff7c9b); -webkit-background-clip:text; background-clip:text; color:transparent; }
@@ -154,7 +175,8 @@
 	.open { color:#7c8cff; font-size:14px; }
 
 	.album { position:fixed; inset:0; z-index:1000; background:rgba(10,10,12,.97); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; }
-	.stage { width:88vw; height:72vh; display:flex; align-items:center; justify-content:center; touch-action:pan-y; }
+	.stage { width:88vw; height:72vh; display:flex; align-items:center; justify-content:center; touch-action:pan-y; cursor:grab; }
+	.stage:active { cursor:grabbing; }
 	.stage picture { display:flex; width:100%; height:100%; align-items:center; justify-content:center; transition:transform .24s cubic-bezier(.22,.8,.28,1), opacity .2s ease; will-change:transform,opacity; }
 	.stage picture.dragging { transition:none; }
 	.main { max-width:100%; max-height:100%; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); user-select:none; }
