@@ -194,7 +194,7 @@
 											delay: (i*30)+450,
 											reverse: true
 										}}>
-										直接进入
+										点击进入
 									</a>
 								</div>
 							{/await}
