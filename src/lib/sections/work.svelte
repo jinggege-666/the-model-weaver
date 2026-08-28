@@ -156,7 +156,7 @@
 							bind:this={ workItems[i] }>
 
 							<div class="img-wrapper">
-								{#await loadImage(`assets/imgs/work-back/${item.id}/cover.jpg`) then src}
+								{#await loadImage(`assets/imgs/work-back/${item.id}/cover-web.jpg`) then src}
 									<img bind:this={images[i]} src="{src}" loading="lazy" decoding="async" ondragstart={(e) => {e.preventDefault()}} draggable="false" alt="{item.title} Background">
 								{/await}
 							</div>

@@ -17,8 +17,9 @@
 		{ slug: "p4", title: "东方雅韵 · 东意四境", desc: "东方雅韵的空间四境，含蓄雅致的意境表达。", count: 23 }
 	];
 
-	function imgOf(slug: string, i: number) {
-		return base + `/assets/imgs/design/interior/${slug}/img-${String(i + 1).padStart(2, "0")}.jpg`;
+	type ImageVariant = "web" | "thumb";
+	function imgOf(slug: string, i: number, variant: ImageVariant = "web") {
+		return base + `/assets/imgs/design/interior/${slug}/${variant}/img-${String(i + 1).padStart(2, "0")}.jpg`;
 	}
 	function countOf(index: number) { return projects[index].count; }
 	function openAlbum(i: number) { album = { index: i, cur: 0 }; }
@@ -39,7 +40,7 @@
 		<div class="grid">
 			{#each projects as p, i}
 				<button class="card" onclick={() => openAlbum(i)}>
-					<div class="imgwrap"><img src={imgOf(p.slug, 0)} alt={p.title} loading="lazy"></div>
+					<div class="imgwrap"><img src={imgOf(p.slug, 0)} alt={p.title} loading="lazy" decoding="async"></div>
 					<div class="body">
 						<h3>{p.title}</h3>
 						<p>{p.desc}</p>
@@ -57,7 +58,7 @@
 	<div class="album">
 		<button class="x" onclick={closeAlbum}>×</button>
 		<button class="nav prev" onclick={prev}>‹</button>
-		<img class="main" src={imgOf(projects[album.index].slug, album.cur)} alt={projects[album.index].title}>
+		<img class="main" src={imgOf(projects[album.index].slug, album.cur)} alt={projects[album.index].title} decoding="async" fetchpriority="high">
 		<button class="nav next" onclick={next}>›</button>
 		<div class="cap">
 			<span class="name">{projects[album.index].title}</span>
@@ -66,7 +67,7 @@
 		<div class="thumbs">
 			{#each Array(countOf(album.index)) as _, i}
 				<button class="t" class:on={i === album.cur} onclick={() => (album.cur = i)}>
-					<img src={imgOf(projects[album.index].slug, i)} alt="" loading="lazy">
+					<img src={imgOf(projects[album.index].slug, i, "thumb")} alt="" loading="lazy" decoding="async">
 				</button>
 			{/each}
 		</div>
