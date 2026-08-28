@@ -2,7 +2,7 @@
 
 	import slickScroll from "slickscrolljs";
 	import { onMount } from "svelte";
-	import { loaderAnimationPromise, loadPageResolve } from "$lib/store";
+	import { loadPageResolve } from "$lib/store";
 	import { devMsg } from "$lib/utils";
 	import workData from "../../static/data/work-data.json";
 	import siteData from "../../static/data/data.json";
@@ -13,12 +13,10 @@
 	import NavComponent from "$lib/components/nav.svelte"
 	import Footer from "$lib/components/footer.svelte";
 	import CursorDot from "$lib/components/cursor-dot.svelte"
-	import Loader from "$lib/components/loader.svelte";
     import { dataState, viewPortState } from "$lib/state.svelte";
 
 	let scrollContainer: HTMLElement = $state()!;
 	let navBar: HTMLElement = $state()!;
-	let loading: boolean = $state(true);
 
 	onMount(async () => {
 		// Disable scrolling on initial load
@@ -30,9 +28,6 @@
 		dataState.workData = workData as WorkData;
 		dataState.siteData = siteData;
 
-		await loaderAnimationPromise; // Wait until loading animation is complete
-
-		loading = false; // Destroy loader component 
 		loadPageResolve(); // Resolve loadPagePromise
 		devMsg();
 
@@ -57,9 +52,6 @@
 
 <!-- Cursor dot tracking when mouse moves inside the body -->
 <CursorDot></CursorDot>
-
-<!-- Page loading progress bar -->
-{#if loading} <Loader></Loader> {/if}
 
 <div id="scroll-frame" bind:this={scrollContainer}>
 	<!-- Top nav-bar and mobile nav-bar -->
