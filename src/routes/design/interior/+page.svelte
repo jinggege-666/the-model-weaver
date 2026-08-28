@@ -9,6 +9,8 @@
 
 	// Album state
 	let album: { index: number; cur: number } | null = $state(null);
+	let touchStartX = 0;
+	let touchStartY = 0;
 
 	const projects = [
 		{ slug: "p1", title: "曲线鎏金录", desc: "黑金空间 · 曲线与鎏金的现代演绎。", count: 7 },
@@ -26,16 +28,32 @@
 	function closeAlbum() { album = null; }
 	function prev() { if (!album) return; const n = countOf(album.index); album.cur = (album.cur - 1 + n) % n; }
 	function next() { if (!album) return; const n = countOf(album.index); album.cur = (album.cur + 1) % n; }
+	function touchStart(event: TouchEvent) {
+		touchStartX = event.changedTouches[0].clientX;
+		touchStartY = event.changedTouches[0].clientY;
+	}
+	function touchEnd(event: TouchEvent) {
+		const dx = event.changedTouches[0].clientX - touchStartX;
+		const dy = event.changedTouches[0].clientY - touchStartY;
+		if (Math.abs(dx) < 45 || Math.abs(dx) <= Math.abs(dy)) return;
+		dx < 0 ? next() : prev();
+	}
 </script>
 
 <svelte:head><title>室内设计 · The Model Weaver</title></svelte:head>
+<svelte:window onkeydown={(event) => {
+	if (!album) return;
+	if (event.key === "ArrowLeft") prev();
+	if (event.key === "ArrowRight") next();
+	if (event.key === "Escape") closeAlbum();
+}} />
 
 <div class="page" class:fade>
 	<div class="inner">
 		<button class="back" onclick={() => goto(resolve("/design"))}>← 设计作品</button>
 		<div class="badge">THE MODEL WEAVER · INTERIOR</div>
 		<h1>室内<span>设计</span></h1>
-		<p class="tag">私宅 · 样板间 · 空间叙事 · 点开作品翻相册</p>
+		<p class="tag">私宅 · 样板间 · 空间叙事 · 左右滑动浏览</p>
 
 		<div class="grid">
 			{#each projects as p, i}
@@ -58,15 +76,18 @@
 	<div class="album">
 		<button class="x" onclick={closeAlbum}>×</button>
 		<button class="nav prev" onclick={prev}>‹</button>
-		<img class="main" src={imgOf(projects[album.index].slug, album.cur)} alt={projects[album.index].title} decoding="async" fetchpriority="high">
+		<div class="stage" role="group" aria-label="左右滑动切换作品图片" ontouchstart={touchStart} ontouchend={touchEnd}>
+			<img class="main" src={imgOf(projects[album.index].slug, album.cur)} alt={projects[album.index].title} decoding="async" fetchpriority="high" draggable="false">
+		</div>
 		<button class="nav next" onclick={next}>›</button>
 		<div class="cap">
 			<span class="name">{projects[album.index].title}</span>
 			<span class="count">{album.cur + 1} / {countOf(album.index)}</span>
 		</div>
+		<div class="swipe-hint">← 左右滑动 →</div>
 		<div class="thumbs">
 			{#each Array(countOf(album.index)) as _, i}
-				<button class="t" class:on={i === album.cur} onclick={() => (album.cur = i)}>
+				<button class="t" class:on={i === album.cur} onclick={() => { if (album) album.cur = i; }}>
 					<img src={imgOf(projects[album.index].slug, i, "thumb")} alt="" loading="lazy" decoding="async">
 				</button>
 			{/each}
@@ -97,7 +118,8 @@
 	.open { color:#7c8cff; font-size:14px; }
 
 	.album { position:fixed; inset:0; z-index:1000; background:rgba(10,10,12,.97); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; }
-	.main { max-width:88vw; max-height:76vh; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); }
+	.stage { width:88vw; height:72vh; display:flex; align-items:center; justify-content:center; touch-action:pan-y; }
+	.main { max-width:100%; max-height:100%; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); user-select:none; }
 	.nav { position:absolute; top:50%; transform:translateY(-50%); width:56px; height:56px; border-radius:50%; border:1px solid #2a2a2e; background:rgba(23,23,26,.6); color:#f2f2f2; font-size:28px; cursor:pointer; line-height:1; }
 	.nav:hover { border-color:#4a4a55; }
 	.nav.prev { left:24px; }
@@ -107,9 +129,25 @@
 	.cap { display:flex; gap:24px; align-items:baseline; margin-top:16px; }
 	.name { font-family:"Songti SC",serif; font-size:20px; }
 	.count { color:#a7a7ad; font-size:14px; }
+	.swipe-hint { display:none; color:#777782; font-size:12px; margin-top:5px; }
 	.thumbs { display:flex; gap:8px; margin-top:18px; max-width:88vw; overflow-x:auto; }
 	.t { width:56px; height:42px; flex:0 0 auto; border:1px solid #2a2a2e; border-radius:6px; overflow:hidden; padding:0; cursor:pointer; opacity:.55; }
 	.t img { width:100%; height:100%; object-fit:cover; }
 	.t.on { opacity:1; border-color:#7c8cff; }
 	.footer { text-align:center; padding-top:56px; color:#a7a7ad; font-size:14px; border-top:1px solid #2a2a2e; margin-top:50px; }
+
+	@media only screen and (max-width: 700px) {
+		.inner { padding:30px 16px 54px; }
+		.grid { display:flex; overflow-x:auto; gap:14px; scroll-snap-type:x mandatory; scrollbar-width:none; margin-left:-16px; margin-right:-16px; padding:0 16px 10px; }
+		.grid::-webkit-scrollbar { display:none; }
+		.card { flex:0 0 84vw; scroll-snap-align:center; }
+		.album { padding:12px; }
+		.stage { width:100vw; height:68vh; }
+		.main { max-width:94vw; max-height:68vh; border-radius:8px; }
+		.nav { display:none; }
+		.x { top:12px; right:12px; background:rgba(10,10,12,.75); z-index:2; }
+		.cap { margin-top:8px; }
+		.swipe-hint { display:block; }
+		.thumbs { max-width:94vw; margin-top:9px; }
+	}
 </style>

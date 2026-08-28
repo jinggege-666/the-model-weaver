@@ -56,4 +56,10 @@
 	.chain p { color:#a7a7ad; font-size:15px; margin:0 0 18px; }
 	.go { color:#7c8cff; font-size:15px; }
 	.footer { text-align:center; padding-top:56px; color:#a7a7ad; font-size:14px; border-top:1px solid #2a2a2e; margin-top:50px; }
+	@media only screen and (max-width: 700px) {
+		.inner { padding:30px 16px 54px; }
+		.grid { display:flex; overflow-x:auto; gap:14px; scroll-snap-type:x mandatory; scrollbar-width:none; margin-left:-16px; margin-right:-16px; padding:0 16px 10px; }
+		.grid::-webkit-scrollbar { display:none; }
+		.chain { flex:0 0 84vw; scroll-snap-align:center; }
+	}
 </style>

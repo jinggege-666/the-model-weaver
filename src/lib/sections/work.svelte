@@ -185,16 +185,17 @@
 										</span>
 									</h1>
 
-									<button 
+									<a
 										class="button item-link interactive"
-										onclick={() => toggleActiveItem(i)}
+										href={item.links[0].link.startsWith("http") ? item.links[0].link : base + item.links[0].link}
+										target={item.links[0].link.startsWith("http") ? "_blank" : "_self"}
 										in:maskSlideIn={{
 											duration: 900,
 											delay: (i*30)+450,
 											reverse: true
 										}}>
-										查看
-									</button>
+										直接进入
+									</a>
 								</div>
 							{/await}
 						</div>
