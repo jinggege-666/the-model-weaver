@@ -17,7 +17,7 @@
 		{ slug: "p4", title: "东方雅韵 · 东意四境", desc: "东方雅韵的空间四境，含蓄雅致的意境表达。", count: 23 }
 	];
 
-	type ImageVariant = "web" | "thumb";
+	type ImageVariant = "web" | "card" | "thumb";
 	function imgOf(slug: string, i: number, variant: ImageVariant = "web") {
 		return base + `/assets/imgs/design/interior/${slug}/${variant}/img-${String(i + 1).padStart(2, "0")}.jpg`;
 	}
@@ -40,7 +40,7 @@
 		<div class="grid">
 			{#each projects as p, i}
 				<button class="card" onclick={() => openAlbum(i)}>
-					<div class="imgwrap"><img src={imgOf(p.slug, 0)} alt={p.title} loading="lazy" decoding="async"></div>
+					<div class="imgwrap"><img src={imgOf(p.slug, 0, "card")} alt={p.title} loading="lazy" decoding="async"></div>
 					<div class="body">
 						<h3>{p.title}</h3>
 						<p>{p.desc}</p>
