@@ -157,7 +157,10 @@
 
 							<div class="img-wrapper">
 								{#await loadImage(`assets/imgs/work-back/${item.id}/cover-web.jpg`) then src}
-									<img bind:this={images[i]} src="{src}" loading="lazy" decoding="async" ondragstart={(e) => {e.preventDefault()}} draggable="false" alt="{item.title} Background">
+									<picture>
+										<source media="(max-width: 700px)" srcset={`${base}/assets/imgs/work-back/${item.id}/cover-mobile.jpg`}>
+										<img bind:this={images[i]} src="{src}" loading="lazy" decoding="async" ondragstart={(e) => {e.preventDefault()}} draggable="false" alt="{item.title} Background">
+									</picture>
 								{/await}
 							</div>
 							{#await inViewPromise then _}
@@ -189,6 +192,7 @@
 										class="button item-link interactive"
 										href={item.links[0].link.startsWith("http") ? item.links[0].link : base + item.links[0].link}
 										target={item.links[0].link.startsWith("http") ? "_blank" : "_self"}
+										data-sveltekit-preload-data="tap"
 										in:maskSlideIn={{
 											duration: 900,
 											delay: (i*30)+450,

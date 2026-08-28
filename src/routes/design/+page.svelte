@@ -17,19 +17,19 @@
 		<p class="tag">选择一个方向，进入你的作品</p>
 
 		<div class="grid">
-			<button class="chain" onclick={() => goto(resolve("/design/interior"))}>
+			<a class="chain" href={resolve("/design/interior")} data-sveltekit-preload-data="tap">
 				<div class="emoji">🛋️</div>
 				<h3>室内设计</h3>
 				<p>私宅 · 样板间 · 空间叙事</p>
 				<span class="go">进入 →</span>
-			</button>
+			</a>
 
-			<button class="chain" onclick={() => goto(resolve("/design/industrial"))}>
+			<a class="chain" href={resolve("/design/industrial")} data-sveltekit-preload-data="tap">
 				<div class="emoji">⚙️</div>
 				<h3>工业设计</h3>
 				<p>产品 · 工业设计作品</p>
 				<span class="go">进入 →</span>
-			</button>
+			</a>
 		</div>
 
 		<div class="footer"><p>by <b>The Model Weaver</b> · jinggege-666</p></div>

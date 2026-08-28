@@ -19,7 +19,7 @@
 		{ slug: "p4", title: "东方雅韵 · 东意四境", desc: "东方雅韵的空间四境，含蓄雅致的意境表达。", count: 23 }
 	];
 
-	type ImageVariant = "web" | "card" | "thumb";
+	type ImageVariant = "web" | "mobile" | "card" | "thumb";
 	function imgOf(slug: string, i: number, variant: ImageVariant = "web") {
 		return base + `/assets/imgs/design/interior/${slug}/${variant}/img-${String(i + 1).padStart(2, "0")}.jpg`;
 	}
@@ -58,7 +58,12 @@
 		<div class="grid">
 			{#each projects as p, i}
 				<button class="card" onclick={() => openAlbum(i)}>
-					<div class="imgwrap"><img src={imgOf(p.slug, 0, "card")} alt={p.title} loading="lazy" decoding="async"></div>
+					<div class="imgwrap">
+						<picture>
+							<source media="(max-width: 700px)" srcset={imgOf(p.slug, 0, "thumb")}>
+							<img src={imgOf(p.slug, 0, "card")} alt={p.title} loading="lazy" decoding="async">
+						</picture>
+					</div>
 					<div class="body">
 						<h3>{p.title}</h3>
 						<p>{p.desc}</p>
@@ -77,7 +82,10 @@
 		<button class="x" onclick={closeAlbum}>×</button>
 		<button class="nav prev" onclick={prev}>‹</button>
 		<div class="stage" role="group" aria-label="左右滑动切换作品图片" ontouchstart={touchStart} ontouchend={touchEnd}>
-			<img class="main" src={imgOf(projects[album.index].slug, album.cur)} alt={projects[album.index].title} decoding="async" fetchpriority="high" draggable="false">
+			<picture>
+				<source media="(max-width: 700px)" srcset={imgOf(projects[album.index].slug, album.cur, "mobile")}>
+				<img class="main" src={imgOf(projects[album.index].slug, album.cur)} alt={projects[album.index].title} decoding="async" fetchpriority="high" draggable="false">
+			</picture>
 		</div>
 		<button class="nav next" onclick={next}>›</button>
 		<div class="cap">
@@ -111,7 +119,8 @@
 	.card { background:#17171a; border:1px solid #2a2a2e; border-radius:16px; overflow:hidden; padding:0; cursor:pointer; text-align:left; color:#f2f2f2; transition:border-color .3s ease, transform .3s ease; }
 	.card:hover { border-color:#4a4a55; transform:translateY(-3px); }
 	.imgwrap { aspect-ratio:16/10; overflow:hidden; }
-	.imgwrap img { width:100%; height:100%; object-fit:cover; }
+	.imgwrap picture, .imgwrap img { display:block; width:100%; height:100%; }
+	.imgwrap img { object-fit:cover; }
 	.body { padding:16px 18px 18px; }
 	.body h3 { font-size:20px; margin:0 0 6px; }
 	.body p { color:#a7a7ad; font-size:14px; margin:0 0 12px; }
@@ -119,6 +128,7 @@
 
 	.album { position:fixed; inset:0; z-index:1000; background:rgba(10,10,12,.97); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; }
 	.stage { width:88vw; height:72vh; display:flex; align-items:center; justify-content:center; touch-action:pan-y; }
+	.stage picture { display:flex; width:100%; height:100%; align-items:center; justify-content:center; }
 	.main { max-width:100%; max-height:100%; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); user-select:none; }
 	.nav { position:absolute; top:50%; transform:translateY(-50%); width:56px; height:56px; border-radius:50%; border:1px solid #2a2a2e; background:rgba(23,23,26,.6); color:#f2f2f2; font-size:28px; cursor:pointer; line-height:1; }
 	.nav:hover { border-color:#4a4a55; }
