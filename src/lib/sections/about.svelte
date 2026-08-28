@@ -69,14 +69,14 @@
 		</div>
 		<div class="profile-image" use:addSlickScrollOffset>
 			{#await loadImage("assets/imgs/profile-photo.jpg") then src}
-				<img src="{src}" in:maskSlideIn={{ duration: 1200,
+				<img src="{src}" loading="lazy" decoding="async" in:maskSlideIn={{ duration: 1200,
 					delay: 100,
 					reverse: true,
 					maskStyles: [
 						{ property: "width", value: "100%"},
 						{ property: "height", value: "100%"}
 					]
-				}} alt="Musab's Profile" class="profile-pic">
+				}} alt="JINGE profile" class="profile-pic">
 			{/await}
 		</div>
 	{/await}

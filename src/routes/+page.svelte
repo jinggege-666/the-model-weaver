@@ -2,7 +2,7 @@
 
 	import slickScroll from "slickscrolljs";
 	import { onMount } from "svelte";
-	import { loaderAnimationPromise, loadPageResolve, imgPromises } from "$lib/store";
+	import { loaderAnimationPromise, loadPageResolve } from "$lib/store";
 	import { devMsg, fetchJsonData } from "$lib/utils";
 	import HomeSection from "$lib/sections/home.svelte";
 	import WorkSection from "$lib/sections/work.svelte";
@@ -25,7 +25,6 @@
 		dataState.workData = await fetchJsonData("/data/work-data.json"); // Wait for work data to load
 		dataState.siteData = await fetchJsonData("/data/data.json"); // Wait for work data to load
 
-		await Promise.allSettled($imgPromises); // Wait for images to load
 		await loaderAnimationPromise; // Wait until loading animation is complete
 
 		loading = false; // Destroy loader component 

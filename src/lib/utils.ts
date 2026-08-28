@@ -1,4 +1,3 @@
-import { imgPromises } from "./store";
 import { base } from "$app/paths";
 
 // Prefix asset/data paths with the base path (for GitHub Pages subpath deployment)
@@ -7,18 +6,11 @@ function withBase(p: string) {
 	return base + clean; // base is '' locally, '/the-model-weaver' in prod
 }
 
-// Load images asynchronously during page loading animation
-export async function loadImage(src: string) {
-    const promise =  new Promise(async (resolve: (src: string) => void, reject) => {
-        const blob = await (await fetch(withBase(src))).blob();
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = (error) => reject(error);
-    });
-
-    imgPromises.update(val => [...val, promise]);
-    return promise;
+// Let the browser stream, decode, cache and lazily load images natively.
+// Converting every image to a base64 blob delayed mobile first paint and
+// duplicated the image data in memory.
+export function loadImage(src: string) {
+    return withBase(src);
 }
 
 export function fetchJsonData(sourceFile: string) {

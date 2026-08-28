@@ -3,7 +3,6 @@
 	import { getGPUTier } from 'detect-gpu';
 	import { onMount } from "svelte";
 	import { fade } from "svelte/transition";
-	import { ImageRenderer } from "$lib/effects/work-slider/renderer";
 	import { letterSlideIn, letterSlideOut, maskSlideIn, maskSlideOut, workImageIntro, workListIntro } from "$lib/animations";
 	import { loadPagePromise } from "$lib/store";
 	import { dataState, scrollAnchorState, viewPortState, workScrollState } from "$lib/state.svelte";
@@ -99,10 +98,9 @@
 
 		onScrolledIntoView(workContainer, () => inViewResolve(true));
 
-		// GPU Tier to decide if effects should be enabled
-		const gpuTier = await getGPUTier();
-		// Svelte store for checking if device is a mobile device
-		viewPortState.isMobile = gpuTier.isMobile!;
+		// Skip GPU benchmarking and the large Three.js bundle entirely on phones.
+		viewPortState.isMobile = window.innerWidth <= 950;
+		const gpuTier = viewPortState.isMobile ? null : await getGPUTier();
 
 		await loadPagePromise;
 		scrollAnchorState.work = workContainer;
@@ -110,7 +108,10 @@
 		listContainer.style.transform = "translate3d(0px, 0px, 0px)";
 
 		// ThreeJS warping effect if device can handle it
-		if (gpuTier.tier >= 2 && !gpuTier.isMobile && gpuTier.fps! >= 30) new ImageRenderer(container, images);
+		if (gpuTier && gpuTier.tier >= 2 && gpuTier.fps! >= 30) {
+			const { ImageRenderer } = await import("$lib/effects/work-slider/renderer");
+			new ImageRenderer(container, images);
+		}
 	});
 
 	// Move slider to active item when it is active
@@ -144,8 +145,7 @@
 		class:disabled={currentActive >= 0}
 		use:workListIntro={{ promise: inViewPromise, onComplete: async () => {
 			 // Begin slider animations and effects once slider is animated in and if device is not a phone
-			const gpuTier = await getGPUTier();
-			if (!gpuTier.isMobile) slider.animate();
+			if (!viewPortState.isMobile) slider.animate();
 		} }}
 	>
 		<div class:mobile={viewPortState.isMobile}>
@@ -163,7 +163,7 @@
 
 							<div class="img-wrapper">
 								{#await loadImage(`assets/imgs/work-back/${item.id}/cover.jpg`) then src}
-									<img bind:this={images[i]} src="{src}" ondragstart={(e) => {e.preventDefault()}} draggable="false" alt="{item.title} Background">
+									<img bind:this={images[i]} src="{src}" loading="lazy" decoding="async" ondragstart={(e) => {e.preventDefault()}} draggable="false" alt="{item.title} Background">
 								{/await}
 							</div>
 							{#await inViewPromise then _}

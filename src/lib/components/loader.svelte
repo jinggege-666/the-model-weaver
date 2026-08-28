@@ -1,50 +1,19 @@
 <script lang="ts">
 
     import { onMount } from "svelte";
-    import { waitForElementTransition } from '$lib/wait-for-element-transition';
-    import { imgPromises, loaderAnimationResolve } from "$lib/store";
-    import { dataState } from "$lib/state.svelte";
+    import { loaderAnimationResolve } from "$lib/store";
 
     let loader: HTMLElement = $state()!;
     let loadingDone = $state(false);
-    let loadingPercentage = $state(0);
+    let loadingPercentage = $state(100);
 
-    onMount(async () => {
-
-        // Wait for work item loading from JSON file to complete
-        await dataState.workData;
-
-        let counter = 0;
-        let length = $imgPromises.length;
-
-        const finish = () => {
-            waitForElementTransition(loader).then(() => {
-                loadingDone = true;
-                loadingPercentage = 0;
-                // Once outro animation is complete, resolve page loading promise, allowing intro animations to begin
-                waitForElementTransition(loader).then(() => {
-                    loaderAnimationResolve();
-                });
-            });
-        };
-
-        // If there are no images queued, finish immediately (avoid stuck black loader)
-        if (length === 0) { finish(); return; }
-
-        // Calculate percentage by how many images have loaded
-        $imgPromises.forEach(async (promise) => {
-            await promise;
-            counter++;
-            loadingPercentage = Math.round((counter / length) * 100);
-
-            // If loading is complete, initiate outro animation
-            if (loadingPercentage > 99) {
-                finish();
-            }
+    onMount(() => {
+        // Keep only a short visual hand-off. Non-critical images and desktop
+        // effects load after the first screen is already usable.
+        requestAnimationFrame(() => {
+            loadingDone = true;
+            setTimeout(() => loaderAnimationResolve(), 300);
         });
-
-        // Safety fallback: never leave the loader stuck
-        setTimeout(() => { loadingPercentage = 100; finish(); }, 6000);
     });
 
 </script>
@@ -96,10 +65,10 @@
 
         .loader 
             background-color: white
-            transition: width 0.8s ease
+            transition: width 0.25s ease
 
         .outro
-            transition: width 0.8s ease
+            transition: width 0.25s ease
             right: 0 !important
             width: 0
 
