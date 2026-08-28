@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from "svelte";
+	import { onMount, tick } from "svelte";
 	import { goto } from "$app/navigation";
 	import { resolve, base } from "$app/paths";
 
@@ -7,6 +7,9 @@
 	let album: { index: number; cur: number } | null = $state(null);
 	let touchStartX = 0;
 	let touchStartY = 0;
+	let dragX = $state(0);
+	let dragging = $state(false);
+	let animating = $state(false);
 	onMount(() => { setTimeout(() => (fade = true), 50); });
 
 	const projects = [
@@ -25,15 +28,39 @@
 	function prev() { if (!album) return; const n = countOf(album.index); album.cur = (album.cur - 1 + n) % n; }
 	function next() { if (!album) return; const n = countOf(album.index); album.cur = (album.cur + 1) % n; }
 	function touchStart(event: TouchEvent) {
+		if (animating) return;
 		touchStartX = event.changedTouches[0].clientX;
 		touchStartY = event.changedTouches[0].clientY;
+		dragging = true;
 	}
-	function touchEnd(event: TouchEvent) {
+	function touchMove(event: TouchEvent) {
+		if (!dragging || animating) return;
 		const dx = event.changedTouches[0].clientX - touchStartX;
 		const dy = event.changedTouches[0].clientY - touchStartY;
-		if (Math.abs(dx) < 45 || Math.abs(dx) <= Math.abs(dy)) return;
-		dx < 0 ? next() : prev();
+		if (Math.abs(dx) <= Math.abs(dy)) return;
+		event.preventDefault();
+		dragX = dx * 0.88;
 	}
+	async function touchEnd(event: TouchEvent) {
+		if (!dragging || animating) return;
+		dragging = false;
+		const dx = event.changedTouches[0].clientX - touchStartX;
+		const dy = event.changedTouches[0].clientY - touchStartY;
+		if (Math.abs(dx) < 55 || Math.abs(dx) <= Math.abs(dy)) { dragX = 0; return; }
+		animating = true;
+		const direction = dx < 0 ? 1 : -1;
+		dragX = direction * -Math.min(window.innerWidth, 520);
+		await new Promise((resolve) => setTimeout(resolve, 190));
+		direction > 0 ? next() : prev();
+		await tick();
+		dragging = true;
+		dragX = direction * Math.min(window.innerWidth, 520) * 0.22;
+		await tick();
+		requestAnimationFrame(() => { dragging = false; dragX = 0; });
+		await new Promise((resolve) => setTimeout(resolve, 260));
+		animating = false;
+	}
+	function touchCancel() { dragging = false; dragX = 0; }
 </script>
 
 <svelte:head><title>工业设计 · The Model Weaver</title></svelte:head>
@@ -77,8 +104,8 @@
 	<div class="album">
 		<button class="x" onclick={closeAlbum} aria-label="关闭相册">×</button>
 		<button class="nav prev" onclick={prev} aria-label="上一张">‹</button>
-		<div class="stage" role="group" aria-label="左右滑动切换作品图片" ontouchstart={touchStart} ontouchend={touchEnd}>
-			<picture>
+		<div class="stage" role="group" aria-label="左右滑动切换作品图片" ontouchstart={touchStart} ontouchmove={touchMove} ontouchend={touchEnd} ontouchcancel={touchCancel}>
+			<picture class:dragging style:transform={`translate3d(${dragX}px, 0, 0) scale(${1 - Math.min(Math.abs(dragX) / 9000, 0.035)})`} style:opacity={1 - Math.min(Math.abs(dragX) / 1600, 0.22)}>
 				<source media="(max-width: 700px)" srcset={imgOf(projects[album.index].slug, album.cur, "mobile")}>
 				<img class="main" src={imgOf(projects[album.index].slug, album.cur)} alt={projects[album.index].title} decoding="async" fetchpriority="high" draggable="false">
 			</picture>
@@ -122,7 +149,8 @@
 	.open { color:#7c8cff; font-size:14px; }
 	.album { position:fixed; inset:0; z-index:1000; background:rgba(10,10,12,.98); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:18px; }
 	.stage { width:88vw; height:72vh; display:flex; align-items:center; justify-content:center; touch-action:pan-y; }
-	.stage picture { display:flex; width:100%; height:100%; align-items:center; justify-content:center; }
+	.stage picture { display:flex; width:100%; height:100%; align-items:center; justify-content:center; transition:transform .24s cubic-bezier(.22,.8,.28,1), opacity .2s ease; will-change:transform,opacity; }
+	.stage picture.dragging { transition:none; }
 	.main { max-width:100%; max-height:100%; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); user-select:none; }
 	.nav { position:absolute; top:50%; transform:translateY(-50%); width:56px; height:56px; border-radius:50%; border:1px solid #2a2a2e; background:rgba(23,23,26,.65); color:#f2f2f2; font-size:28px; cursor:pointer; line-height:1; }
 	.nav.prev { left:24px; }

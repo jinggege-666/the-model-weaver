@@ -1,0 +1,1 @@
+import{$ as e}from"./2aKgC_Vk.js";e();
