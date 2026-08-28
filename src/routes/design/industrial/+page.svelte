@@ -5,11 +5,11 @@
 
 	let fade = $state(false);
 	let album: { index: number; cur: number } | null = $state(null);
-	let touchStartX = 0;
-	let touchStartY = 0;
-	let dragX = $state(0);
-	let dragging = $state(false);
-	let animating = $state(false);
+	let slideTrack = $state() as HTMLElement;
+	let pointerDragging = $state(false);
+	let dragStartX = 0;
+	let dragStartScrollLeft = 0;
+	let scrollTimer: ReturnType<typeof setTimeout> | undefined;
 	onMount(() => { setTimeout(() => (fade = true), 50); });
 
 	const projects = [
@@ -23,65 +23,48 @@
 		return base + `/assets/imgs/design/industrial/${slug}/${variant}/img-${String(i + 1).padStart(2, "0")}.jpg`;
 	}
 	function countOf(index: number) { return projects[index].count; }
-	function openAlbum(i: number) { album = { index: i, cur: 0 }; }
-	function closeAlbum() { album = null; }
-	function prev() { if (!album) return; const n = countOf(album.index); album.cur = (album.cur - 1 + n) % n; }
-	function next() { if (!album) return; const n = countOf(album.index); album.cur = (album.cur + 1) % n; }
-	function touchStart(event: TouchEvent) {
-		if (animating) return;
-		touchStartX = event.changedTouches[0].clientX;
-		touchStartY = event.changedTouches[0].clientY;
-		dragging = true;
-	}
-	function touchMove(event: TouchEvent) {
-		if (!dragging || animating) return;
-		const dx = event.changedTouches[0].clientX - touchStartX;
-		const dy = event.changedTouches[0].clientY - touchStartY;
-		if (Math.abs(dx) <= Math.abs(dy)) return;
-		event.preventDefault();
-		dragX = dx * 0.88;
-	}
-	async function finishSwipe(dx: number, dy: number) {
-		if (Math.abs(dx) < 55 || Math.abs(dx) <= Math.abs(dy)) { dragX = 0; return; }
-		animating = true;
-		const direction = dx < 0 ? 1 : -1;
-		dragX = direction * -Math.min(window.innerWidth, 520);
-		await new Promise((resolve) => setTimeout(resolve, 190));
-		direction > 0 ? next() : prev();
+	async function openAlbum(i: number) {
+		album = { index: i, cur: 0 };
 		await tick();
-		dragging = true;
-		dragX = direction * Math.min(window.innerWidth, 520) * 0.22;
-		await tick();
-		requestAnimationFrame(() => { dragging = false; dragX = 0; });
-		await new Promise((resolve) => setTimeout(resolve, 260));
-		animating = false;
+		slideTrack.scrollLeft = 0;
 	}
-	function touchEnd(event: TouchEvent) {
-		if (!dragging || animating) return;
-		dragging = false;
-		void finishSwipe(event.changedTouches[0].clientX - touchStartX, event.changedTouches[0].clientY - touchStartY);
+	function closeAlbum() { clearTimeout(scrollTimer); album = null; }
+	function goTo(index: number, behavior: ScrollBehavior = "smooth") {
+		if (!album || !slideTrack) return;
+		const n = countOf(album.index);
+		const normalized = (index + n) % n;
+		album.cur = normalized;
+		slideTrack.scrollTo({ left: normalized * slideTrack.clientWidth, behavior });
 	}
-	function touchCancel() { dragging = false; dragX = 0; }
+	function prev() { if (album) goTo(album.cur - 1); }
+	function next() { if (album) goTo(album.cur + 1); }
+	function onTrackScroll() {
+		if (!album || !slideTrack || pointerDragging) return;
+		clearTimeout(scrollTimer);
+		scrollTimer = setTimeout(() => {
+			if (!album || !slideTrack.clientWidth) return;
+			album.cur = Math.max(0, Math.min(countOf(album.index) - 1, Math.round(slideTrack.scrollLeft / slideTrack.clientWidth)));
+		}, 60);
+	}
 	function pointerStart(event: PointerEvent) {
-		if (event.pointerType === "touch" || animating) return;
-		touchStartX = event.clientX;
-		touchStartY = event.clientY;
-		dragging = true;
+		if (event.pointerType === "touch") return;
+		pointerDragging = true;
+		dragStartX = event.clientX;
+		dragStartScrollLeft = slideTrack.scrollLeft;
 		(event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
 	}
 	function pointerMove(event: PointerEvent) {
-		if (event.pointerType === "touch" || !dragging || animating) return;
-		const dx = event.clientX - touchStartX;
-		const dy = event.clientY - touchStartY;
-		if (Math.abs(dx) <= Math.abs(dy)) return;
+		if (event.pointerType === "touch" || !pointerDragging) return;
 		event.preventDefault();
-		dragX = dx * 0.88;
+		slideTrack.scrollLeft = dragStartScrollLeft - (event.clientX - dragStartX);
 	}
 	function pointerEnd(event: PointerEvent) {
-		if (event.pointerType === "touch" || !dragging || animating) return;
-		dragging = false;
-		void finishSwipe(event.clientX - touchStartX, event.clientY - touchStartY);
+		if (event.pointerType === "touch" || !pointerDragging) return;
+		pointerDragging = false;
+		if (!album || !slideTrack.clientWidth) return;
+		goTo(Math.round(slideTrack.scrollLeft / slideTrack.clientWidth));
 	}
+	function pointerCancel() { pointerDragging = false; }
 </script>
 
 <svelte:head><title>工业设计 · The Model Weaver</title></svelte:head>
@@ -125,11 +108,17 @@
 	<div class="album">
 		<button class="x" onclick={closeAlbum} aria-label="关闭相册">×</button>
 		<button class="nav prev" onclick={prev} aria-label="上一张">‹</button>
-		<div class="stage" role="group" aria-label="拖动或滑动切换作品图片" ontouchstart={touchStart} ontouchmove={touchMove} ontouchend={touchEnd} ontouchcancel={touchCancel} onpointerdown={pointerStart} onpointermove={pointerMove} onpointerup={pointerEnd} onpointercancel={touchCancel}>
-			<picture class:dragging style:transform={`translate3d(${dragX}px, 0, 0) scale(${1 - Math.min(Math.abs(dragX) / 9000, 0.035)})`} style:opacity={1 - Math.min(Math.abs(dragX) / 1600, 0.22)}>
-				<source media="(max-width: 700px)" srcset={imgOf(projects[album.index].slug, album.cur, "mobile")}>
-				<img class="main" src={imgOf(projects[album.index].slug, album.cur)} alt={projects[album.index].title} decoding="async" fetchpriority="high" draggable="false">
-			</picture>
+		<div class="stage" role="group" aria-label="拖动或滑动切换作品图片">
+			<div class="slides" role="group" aria-label="作品图片" class:pointer-dragging={pointerDragging} bind:this={slideTrack} onscroll={onTrackScroll} onpointerdown={pointerStart} onpointermove={pointerMove} onpointerup={pointerEnd} onpointercancel={pointerCancel}>
+				{#each Array(countOf(album.index)) as _, i}
+					<div class="slide">
+						<picture>
+							<source media="(max-width: 700px)" srcset={imgOf(projects[album.index].slug, i, "mobile")}>
+							<img class="main" src={imgOf(projects[album.index].slug, i)} alt={`${projects[album.index].title} ${i + 1}`} loading={i === album.cur ? "eager" : "lazy"} decoding="async" draggable="false">
+						</picture>
+					</div>
+				{/each}
+			</div>
 		</div>
 		<button class="nav next" onclick={next} aria-label="下一张">›</button>
 		<div class="cap">
@@ -139,7 +128,7 @@
 		<div class="swipe-hint">← 左右滑动 →</div>
 		<div class="thumbs">
 			{#each Array(countOf(album.index)) as _, i}
-				<button class="t" class:on={i === album.cur} onclick={() => { if (album) album.cur = i; }} aria-label={`查看第 ${i + 1} 张`}>
+				<button class="t" class:on={i === album.cur} onclick={() => goTo(i)} aria-label={`查看第 ${i + 1} 张`}>
 					<img src={imgOf(projects[album.index].slug, i, "thumb")} alt="" loading="lazy" decoding="async">
 				</button>
 			{/each}
@@ -169,10 +158,12 @@
 	.body p { color:#a7a7ad; font-size:14px; margin:0 0 12px; min-height:40px; }
 	.open { color:#7c8cff; font-size:14px; }
 	.album { position:fixed; inset:0; z-index:1000; background:rgba(10,10,12,.98); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:18px; }
-	.stage { width:88vw; height:72vh; display:flex; align-items:center; justify-content:center; touch-action:pan-y; cursor:grab; }
-	.stage:active { cursor:grabbing; }
-	.stage picture { display:flex; width:100%; height:100%; align-items:center; justify-content:center; transition:transform .24s cubic-bezier(.22,.8,.28,1), opacity .2s ease; will-change:transform,opacity; }
-	.stage picture.dragging { transition:none; }
+	.stage { width:88vw; height:72vh; overflow:hidden; }
+	.slides { display:flex; width:100%; height:100%; overflow-x:auto; overflow-y:hidden; scroll-snap-type:x mandatory; scroll-behavior:smooth; scrollbar-width:none; overscroll-behavior-x:contain; touch-action:pan-y; cursor:grab; }
+	.slides::-webkit-scrollbar { display:none; }
+	.slides.pointer-dragging { cursor:grabbing; scroll-snap-type:none; scroll-behavior:auto; user-select:none; }
+	.slide { flex:0 0 100%; width:100%; height:100%; display:flex; align-items:center; justify-content:center; scroll-snap-align:center; scroll-snap-stop:always; }
+	.slide picture { display:flex; width:100%; height:100%; align-items:center; justify-content:center; }
 	.main { max-width:100%; max-height:100%; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); user-select:none; }
 	.nav { position:absolute; top:50%; transform:translateY(-50%); width:56px; height:56px; border-radius:50%; border:1px solid #2a2a2e; background:rgba(23,23,26,.65); color:#f2f2f2; font-size:28px; cursor:pointer; line-height:1; }
 	.nav.prev { left:24px; }
