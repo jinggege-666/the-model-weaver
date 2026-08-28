@@ -13,14 +13,6 @@ export function loadImage(src: string) {
     return withBase(src);
 }
 
-export function fetchJsonData(sourceFile: string) {
-    return new Promise(async (resolve: (data: any) => void) => {
-        const request = await fetch(withBase(sourceFile));
-        const data = await request.json();
-        resolve(data);
-    });
-}
-
 export function onScrolledIntoView(node: HTMLElement, entryInView: (entry: IntersectionObserverEntry) => void) {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {

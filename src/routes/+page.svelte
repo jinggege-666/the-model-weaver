@@ -3,7 +3,10 @@
 	import slickScroll from "slickscrolljs";
 	import { onMount } from "svelte";
 	import { loaderAnimationPromise, loadPageResolve } from "$lib/store";
-	import { devMsg, fetchJsonData } from "$lib/utils";
+	import { devMsg } from "$lib/utils";
+	import workData from "../../static/data/work-data.json";
+	import siteData from "../../static/data/data.json";
+	import type { WorkData } from "$lib/types";
 	import HomeSection from "$lib/sections/home.svelte";
 	import WorkSection from "$lib/sections/work.svelte";
 	import AboutSection from "$lib/sections/about.svelte";
@@ -22,8 +25,10 @@
 		scrollContainer.style.overflowY = "hidden";
 		scrollContainer.scrollTo(0, 0);
 		
-		dataState.workData = await fetchJsonData("/data/work-data.json"); // Wait for work data to load
-		dataState.siteData = await fetchJsonData("/data/data.json"); // Wait for work data to load
+		// These tiny datasets are bundled so mobile startup does not wait on two
+		// additional GitHub Pages requests.
+		dataState.workData = workData as WorkData;
+		dataState.siteData = siteData;
 
 		await loaderAnimationPromise; // Wait until loading animation is complete
 

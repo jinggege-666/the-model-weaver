@@ -1,6 +1,5 @@
 <script lang="ts">
 
-	import { getGPUTier } from 'detect-gpu';
 	import { onMount } from "svelte";
 	import { fade } from "svelte/transition";
 	import { letterSlideIn, letterSlideOut, maskSlideIn, maskSlideOut, workImageIntro, workListIntro } from "$lib/animations";
@@ -98,20 +97,15 @@
 
 		onScrolledIntoView(workContainer, () => inViewResolve(true));
 
-		// Skip GPU benchmarking and the large Three.js bundle entirely on phones.
+		// Use the lightweight image slider on every device. The previous WebGL
+		// distortion effect added a large download and could race lazy images.
 		viewPortState.isMobile = window.innerWidth <= 950;
-		const gpuTier = viewPortState.isMobile ? null : await getGPUTier();
 
 		await loadPagePromise;
 		scrollAnchorState.work = workContainer;
 
 		listContainer.style.transform = "translate3d(0px, 0px, 0px)";
 
-		// ThreeJS warping effect if device can handle it
-		if (gpuTier && gpuTier.tier >= 2 && gpuTier.fps! >= 30) {
-			const { ImageRenderer } = await import("$lib/effects/work-slider/renderer");
-			new ImageRenderer(container, images);
-		}
 	});
 
 	// Move slider to active item when it is active
