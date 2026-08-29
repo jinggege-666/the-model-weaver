@@ -37,6 +37,26 @@
         ]
     },
     {
+        "id": "video",
+        "title": "短视频作品",
+        "details": {
+            "description": "产品广告、叙事镜头与 AI 运动实验，收录每个测试主题中表现最好的短视频作品。",
+            "summary": "短视频作品"
+        },
+        "roles": [
+            "AI 视频",
+            "创意导演",
+            "模型评测"
+        ],
+        "links": [
+            {
+                "type": "web",
+                "text": "进入短视频作品集",
+                "link": "/video"
+            }
+        ]
+    },
+    {
         "id": "v1",
         "title": "skill",
         "details": {

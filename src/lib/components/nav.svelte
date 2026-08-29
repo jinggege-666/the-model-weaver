@@ -89,10 +89,13 @@
 							</button>
 						</li>
 						<li use:introAnimation={{ delay: 1200 }}>
+							<a href={base + "/video"} class="clickable" in:mobileTransitionSwitcher={{ delay: 300 }}>短视频</a>
+						</li>
+						<li use:introAnimation={{ delay: 1250 }}>
 							<button 
 								class="interactive clickable"
 								onclick={() => navigate(scrollAnchorState.about!)} 
-								in:mobileTransitionSwitcher={{ delay: 300 }}>
+								in:mobileTransitionSwitcher={{ delay: 325 }}>
 								关于
 							</button>
 						</li>
