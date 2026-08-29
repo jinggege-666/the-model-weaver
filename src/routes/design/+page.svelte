@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { goto } from "$app/navigation";
+	import { beforeNavigate } from "$app/navigation";
 	import { resolve } from "$app/paths";
+	import { rememberReturn, returnTo } from "$lib/return-navigation";
 
 	let fade = $state(false);
+	beforeNavigate(({ to }) => {
+		if (to?.url.pathname.endsWith("/design/interior") || to?.url.pathname.endsWith("/design/industrial")) rememberReturn(to.url.pathname);
+	});
 	onMount(() => { setTimeout(() => (fade = true), 50); });
 </script>
 
@@ -11,7 +15,7 @@
 
 <div class="page" class:fade>
 	<div class="inner">
-		<button class="back" onclick={() => goto(resolve("/"))}>← 返回首页</button>
+		<button class="back" onclick={() => returnTo("/")}>← 返回首页</button>
 		<div class="badge">THE MODEL WEAVER · DESIGN</div>
 		<h1>设计<span>作品</span></h1>
 		<p class="tag">选择一个方向，进入你的作品</p>

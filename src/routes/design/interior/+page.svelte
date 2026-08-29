@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { onMount, tick } from "svelte";
-	import { goto } from "$app/navigation";
-	import { resolve } from "$app/paths";
 	import { base } from "$app/paths";
+	import { returnTo } from "$lib/return-navigation";
 
 	let fade = $state(false);
 	onMount(() => { setTimeout(() => (fade = true), 50); });
@@ -81,7 +80,7 @@
 
 <div class="page" class:fade>
 	<div class="inner">
-		<button class="back" onclick={() => goto(resolve("/design"))}>← 设计作品</button>
+		<button class="back" onclick={() => returnTo("/design")}>← 设计作品</button>
 		<div class="badge">THE MODEL WEAVER · INTERIOR</div>
 		<h1>室内<span>设计</span></h1>
 		<p class="tag">私宅 · 样板间 · 空间叙事 · 左右滑动浏览</p>

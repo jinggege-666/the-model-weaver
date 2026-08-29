@@ -2,6 +2,8 @@
 
 	import slickScroll from "slickscrolljs";
 	import { onMount } from "svelte";
+	import { beforeNavigate } from "$app/navigation";
+	import { rememberReturn } from "$lib/return-navigation";
 	import { loadPageResolve } from "$lib/store";
 	import { devMsg } from "$lib/utils";
 	import workData from "../../static/data/work-data.json";
@@ -18,7 +20,15 @@
 	let scrollContainer: HTMLElement = $state()!;
 	let navBar: HTMLElement = $state()!;
 
+	beforeNavigate(({ from, to }) => {
+		if (!from || !to || from.url.pathname === to.url.pathname || !scrollContainer) return;
+		sessionStorage.setItem("jinge:home-scroll", String(scrollContainer.scrollTop));
+		rememberReturn(to.url.pathname);
+	});
+
 	onMount(async () => {
+		const savedScroll = Number(sessionStorage.getItem("jinge:home-scroll"));
+		sessionStorage.removeItem("jinge:home-scroll");
 		// Disable scrolling on initial load
 		scrollContainer.style.overflowY = "hidden";
 		scrollContainer.scrollTo(0, 0);
@@ -44,6 +54,10 @@
 		// Enable scrolling
 		scrollContainer.style.overflowX = "hidden";
 		scrollContainer.style.overflowY = "auto";
+
+		if (Number.isFinite(savedScroll) && savedScroll > 0) {
+			requestAnimationFrame(() => requestAnimationFrame(() => scrollContainer.scrollTo(0, savedScroll)));
+		}
 	});
 
 </script>

@@ -104,7 +104,16 @@
 		await loadPagePromise;
 		scrollAnchorState.work = workContainer;
 
-		listContainer.style.transform = "translate3d(0px, 0px, 0px)";
+		const savedPosition = Number(sessionStorage.getItem("jinge:work-slider-position"));
+		sessionStorage.removeItem("jinge:work-slider-position");
+		if (Number.isFinite(savedPosition)) {
+			slider.currentPosition = savedPosition;
+			slider.targetPosition = savedPosition;
+			slider.initialPosition = savedPosition;
+			listContainer.style.transform = `translate3d(${savedPosition}px, 0px, 0px)`;
+		} else {
+			listContainer.style.transform = "translate3d(0px, 0px, 0px)";
+		}
 
 	});
 
@@ -191,6 +200,7 @@
 									<a
 										class="button item-link interactive"
 										href={item.links[0].link.startsWith("http") ? item.links[0].link : base + item.links[0].link}
+										onclick={() => sessionStorage.setItem("jinge:work-slider-position", String(slider.currentPosition))}
 										target={item.links[0].link.startsWith("http") ? "_blank" : "_self"}
 										data-sveltekit-preload-data="tap"
 										in:maskSlideIn={{

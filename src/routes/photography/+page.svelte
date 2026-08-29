@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
-	import { base, resolve } from "$app/paths";
+	import { base } from "$app/paths";
+	import { returnTo } from "$lib/return-navigation";
 </script>
 
 <svelte:head><title>摄影作品 · JINGE</title></svelte:head>
 
 <div class="photography-page">
 	<header>
-		<button onclick={() => goto(resolve("/"))}>← 返回我的主页</button>
+		<button onclick={() => returnTo("/")}>← 返回我的主页</button>
 		<span>JINGE · 摄影作品</span>
 	</header>
 	<iframe

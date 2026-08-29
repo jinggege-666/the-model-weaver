@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, tick } from "svelte";
-	import { goto } from "$app/navigation";
-	import { resolve, base } from "$app/paths";
+	import { base } from "$app/paths";
+	import { returnTo } from "$lib/return-navigation";
 
 	let fade = $state(false);
 	let album: { index: number; cur: number } | null = $state(null);
@@ -77,7 +77,7 @@
 
 <div class="page" class:fade>
 	<div class="inner">
-		<button class="back" onclick={() => goto(resolve("/design"))}>← 设计作品</button>
+		<button class="back" onclick={() => returnTo("/design")}>← 设计作品</button>
 		<div class="badge">THE MODEL WEAVER · INDUSTRIAL</div>
 		<h1>工业<span>设计</span></h1>
 		<p class="tag">左右滑动浏览项目 · 点开作品后继续滑动翻页</p>
