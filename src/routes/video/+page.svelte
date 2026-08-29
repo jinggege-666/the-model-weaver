@@ -122,7 +122,7 @@
 	main { width: min(1480px, 100%); margin: 0 auto; padding: 0 clamp(18px, 5vw, 76px) 120px; }
 	.hero { min-height: 76vh; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(260px, .7fr); align-items: end; gap: 8vw; padding: 15vh 0 11vh; border-bottom: 1px solid rgba(255,255,255,.12); }
 	.eyebrow, .section-index { margin: 0 0 24px; color: #c6a678; font-size: 11px; letter-spacing: .2em; }
-	h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(70px, 10vw, 150px); font-weight: 400; line-height: .77; letter-spacing: -.065em; }
+	h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(70px, 10vw, 150px); font-weight: 400; line-height: 1; letter-spacing: -.065em; }
 	h1 em { color: #d6b37e; font-weight: 400; }
 	.intro { width: min(590px, 100%); margin: 45px 0 0; color: #aaa59c; font-size: clamp(15px, 1.4vw, 19px); line-height: 1.9; }
 	.hero-stats { display: grid; gap: 0; border-top: 1px solid rgba(255,255,255,.14); }

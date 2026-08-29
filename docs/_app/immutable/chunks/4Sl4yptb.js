@@ -1,1 +1,0 @@
-import{l as e,n as t}from"./BGZ8ixwW.js";var n=e=>`jinge:return:${e}`;function r(e){sessionStorage.setItem(n(e),location.pathname+location.search)}function i(r){let i=n(location.pathname);if(sessionStorage.getItem(i)){sessionStorage.removeItem(i),history.back();return}t(e(r))}export{i as n,r as t};
