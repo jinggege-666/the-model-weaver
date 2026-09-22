@@ -89,7 +89,7 @@
 							</button>
 						</li>
 						<li use:introAnimation={{ delay: 1200 }}>
-							<a href={base + "/video"} class="clickable" in:mobileTransitionSwitcher={{ delay: 300 }}>短视频</a>
+							<a href={base + "/video"} class="clickable" in:mobileTransitionSwitcher={{ delay: 300 }}>影像作品</a>
 						</li>
 						<li use:introAnimation={{ delay: 1250 }}>
 							<button 
