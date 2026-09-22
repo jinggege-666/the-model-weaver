@@ -1,5 +1,25 @@
 [
     {
+        "id": "video",
+        "title": "影像作品",
+        "details": {
+            "description": "五部精选影像，长片按自然转场整理为连续章节。",
+            "summary": "影像作品"
+        },
+        "roles": [
+            "影像",
+            "视觉叙事",
+            "分章呈现"
+        ],
+        "links": [
+            {
+                "type": "web",
+                "text": "进入影像作品集",
+                "link": "/video"
+            }
+        ]
+    },
+    {
         "id": "marymount",
         "title": "设计作品",
         "details": {
@@ -33,26 +53,6 @@
                 "type": "web",
                 "text": "进入作品集",
                 "link": "/photography"
-            }
-        ]
-    },
-    {
-        "id": "video",
-        "title": "影像作品",
-        "details": {
-            "description": "FIRST CANVAS 影像作品，按自然转场整理为四个连续章节。",
-            "summary": "影像作品"
-        },
-        "roles": [
-            "影像",
-            "视觉叙事",
-            "分章呈现"
-        ],
-        "links": [
-            {
-                "type": "web",
-                "text": "进入影像作品集",
-                "link": "/video"
             }
         ]
     },

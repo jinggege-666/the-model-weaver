@@ -1,32 +1,88 @@
 [
   {
+    "id": "owl-and-badger",
+    "title": "OWL AND BADGER",
+    "subtitle": "Google DeepMind · PUBLIC DOMAIN",
+    "duration_seconds": 22.68,
+    "video": "/videos/owl-and-badger/owl-and-badger.mp4",
+    "poster": "/videos/owl-and-badger/owl-and-badger.webp"
+  },
+  {
+    "id": "chernobyl-decaying-room",
+    "title": "CHERNOBYL DECAYING ROOM",
+    "subtitle": "Global Donald · CC0",
+    "duration_seconds": 7.99,
+    "video": "/videos/chernobyl-decaying-room/chernobyl-decaying-room.mp4",
+    "poster": "/videos/chernobyl-decaying-room/chernobyl-decaying-room.webp"
+  },
+  {
+    "id": "witches-wood",
+    "title": "WITCHES WOOD",
+    "subtitle": "Vortex Project Studios · CC BY 3.0",
+    "duration_seconds": 68.43,
+    "video": "/videos/witches-wood/witches-wood.mp4",
+    "poster": "/videos/witches-wood/witches-wood.webp"
+  },
+  {
+    "id": "execute-01",
+    "title": "EXECUTE · 第一章",
+    "subtitle": "Vincent Chang Deng · 00:00–02:29",
+    "duration_seconds": 149.23,
+    "video": "/videos/execute/part-01.mp4",
+    "poster": "/videos/execute/part-01.webp"
+  },
+  {
+    "id": "execute-02",
+    "title": "EXECUTE · 第二章",
+    "subtitle": "Vincent Chang Deng · 02:29–05:02",
+    "duration_seconds": 152.63,
+    "video": "/videos/execute/part-02.mp4",
+    "poster": "/videos/execute/part-02.webp"
+  },
+  {
+    "id": "execute-03",
+    "title": "EXECUTE · 第三章",
+    "subtitle": "Vincent Chang Deng · 05:02–07:22",
+    "duration_seconds": 139.93,
+    "video": "/videos/execute/part-03.mp4",
+    "poster": "/videos/execute/part-03.webp"
+  },
+  {
+    "id": "execute-04",
+    "title": "EXECUTE · 第四章",
+    "subtitle": "Vincent Chang Deng · 07:22–10:03",
+    "duration_seconds": 161.6,
+    "video": "/videos/execute/part-04.mp4",
+    "poster": "/videos/execute/part-04.webp"
+  },
+  {
     "id": "first-canvas-01",
     "title": "FIRST CANVAS · 第一章",
-    "subtitle": "PART 01 · 00:00–02:31",
-    "duration_seconds": 150.917,
+    "subtitle": "Moncho Concha · 00:00–02:31",
+    "duration_seconds": 150.96,
     "video": "/videos/first-canvas/part-01.mp4",
     "poster": "/videos/first-canvas/part-01.webp"
   },
   {
     "id": "first-canvas-02",
     "title": "FIRST CANVAS · 第二章",
-    "subtitle": "PART 02 · 02:31–05:07",
-    "duration_seconds": 156.208,
+    "subtitle": "Moncho Concha · 02:31–05:07",
+    "duration_seconds": 156.21,
     "video": "/videos/first-canvas/part-02.mp4",
     "poster": "/videos/first-canvas/part-02.webp"
   },
   {
     "id": "first-canvas-03",
     "title": "FIRST CANVAS · 第三章",
-    "subtitle": "PART 03 · 05:07–07:31",
-    "duration_seconds": 143.458,
+    "subtitle": "Moncho Concha · 05:07–07:31",
+    "duration_seconds": 143.46,
     "video": "/videos/first-canvas/part-03.mp4",
     "poster": "/videos/first-canvas/part-03.webp"
   },
   {
     "id": "first-canvas-04",
     "title": "FIRST CANVAS · 第四章",
-    "subtitle": "PART 04 · 07:31–10:02",
+    "subtitle": "Moncho Concha · 07:31–10:02",
     "duration_seconds": 151.55,
     "video": "/videos/first-canvas/part-04.mp4",
     "poster": "/videos/first-canvas/part-04.webp"

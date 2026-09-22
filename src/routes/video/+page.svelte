@@ -36,7 +36,7 @@
 
 <svelte:head>
 	<title>影像作品 · JINGE</title>
-	<meta name="description" content="JINGE 影像作品集：FIRST CANVAS 四章完整呈现。" />
+	<meta name="description" content="JINGE 影像作品集：五部精选影像，以十一个独立播放单元呈现。" />
 </svelte:head>
 
 <svelte:window onkeydown={handleKeydown} />
@@ -50,13 +50,14 @@
 	<main>
 		<section class="hero">
 			<div class="hero-copy">
-				<p class="eyebrow">FIRST CANVAS · FOUR CHAPTERS</p>
+				<p class="eyebrow">SELECTED MOVING IMAGE · 2026</p>
 				<h1>影像<br /><em>作品集</em></h1>
-				<p class="intro">一部影像作品按自然转场分为四章，可从任意章节开始观看。</p>
+				<p class="intro">五部精选影像，长片按自然转场分章，可从任意片段开始观看。</p>
 			</div>
 			<div class="hero-stats" aria-label="作品数据">
-				<div><strong>04</strong><span>连续章节</span></div>
-				<div><strong>10'</strong><span>完整片长</span></div>
+				<div><strong>05</strong><span>影像作品</span></div>
+				<div><strong>11</strong><span>播放单元</span></div>
+				<div><strong>22'</strong><span>总片长</span></div>
 				<div><strong>720P</strong><span>高清影像</span></div>
 			</div>
 		</section>
@@ -65,9 +66,9 @@
 			<div class="collection-head">
 				<div>
 					<p class="section-index">01 / FILM</p>
-					<h2 id="collection-title">FIRST CANVAS</h2>
+					<h2 id="collection-title">SELECTED FILMS</h2>
 				</div>
-				<p class="chapter-count">04 CHAPTERS</p>
+				<p class="chapter-count">11 CLIPS</p>
 			</div>
 
 			<div class="video-grid">
@@ -89,11 +90,14 @@
 				{/each}
 			</div>
 
-			<p class="credit">
-				FIRST CANVAS · 影像原作 Moncho Concha ·
-				<a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noreferrer">CC BY 3.0</a>
-				· 本站进行了分章与网页转码
-			</p>
+			<div class="credits" aria-label="影像来源与许可">
+				<p class="credit-title">CREDITS / LICENSES</p>
+				<p>OWL AND BADGER · Google DeepMind · Public Domain（按源文件标注）· 网页转码</p>
+				<p>VEO3 CHERNOBYL DECAYING ROOM · Global Donald · <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noreferrer">CC0</a> · 网页转码</p>
+				<p>EXECUTE · Vincent Chang Deng · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noreferrer">CC BY 3.0</a> · 分章与网页转码</p>
+				<p>WITCHES WOOD · Vortex Project Studios · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noreferrer">CC BY 3.0</a> · 网页转码</p>
+				<p>FIRST CANVAS · Moncho Concha · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noreferrer">CC BY 3.0</a> · 分章与网页转码</p>
+			</div>
 		</section>
 	</main>
 </div>
@@ -147,8 +151,10 @@
 	.number { color: #706d67; font-family: Georgia, serif; font-size: 13px; }
 	.card-meta h3 { margin: 0 0 7px; color: #eee9df; font-size: 16px; font-weight: 500; }
 	.card-meta p { margin: 0; color: #7f7b74; font-size: 12px; }
-	.credit { margin: 64px 0 0; color: #64615d; font-size: 12px; }
-	.credit a { color: #8b857c; text-underline-offset: 3px; }
+	.credits { margin: 64px 0 0; color: #64615d; font-size: 12px; line-height: 1.7; }
+	.credits p { margin: 5px 0; }
+	.credits .credit-title { margin-bottom: 14px; color: #91897f; font-size: 10px; letter-spacing: .18em; }
+	.credits a { color: #8b857c; text-underline-offset: 3px; }
 	.player-backdrop { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 24px; background: rgba(0,0,0,.88); backdrop-filter: blur(16px); }
 	.player-dialog { position: relative; width: min(1100px, 100%); background: #111114; box-shadow: 0 25px 100px rgba(0,0,0,.6); }
 	.player-dialog video { display: block; width: 100%; max-height: 72vh; background: black; }
