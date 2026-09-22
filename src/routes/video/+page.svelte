@@ -15,9 +15,18 @@
 
 	const videos = videoData as VideoWork[];
 	let activeVideo = $state<VideoWork | null>(null);
+	let activeVideoSource = $state("");
+
+	function openPlayer(item: VideoWork) {
+		const useLightweightSource = window.matchMedia("(max-width: 900px)").matches
+			|| /Android|iPhone|iPad|iPod|Mobile|MicroMessenger/i.test(navigator.userAgent);
+		activeVideoSource = useLightweightSource ? item.mobile_video : item.video;
+		activeVideo = item;
+	}
 
 	function closePlayer() {
 		activeVideo = null;
+		activeVideoSource = "";
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -59,7 +68,7 @@
 				<div><strong>05</strong><span>视频作品</span></div>
 				<div><strong>11</strong><span>播放单元</span></div>
 				<div><strong>22'</strong><span>总片长</span></div>
-				<div><strong>720P</strong><span>高清视频</span></div>
+				<div><strong>AUTO</strong><span>画质适配</span></div>
 			</div>
 		</section>
 
@@ -75,7 +84,7 @@
 			<div class="video-grid">
 				{#each videos as item, index (item.id)}
 					<article class="video-card">
-						<button class="poster-button" onclick={() => activeVideo = item} aria-label={`播放：${item.title}`}>
+						<button class="poster-button" onclick={() => openPlayer(item)} aria-label={`播放：${item.title}`}>
 							<img src={base + item.poster} alt={item.title} loading={index === 0 ? "eager" : "lazy"} decoding="async" />
 							<span class="play" aria-hidden="true">▶</span>
 							<span class="duration">{formatDuration(item.duration_seconds)}</span>
@@ -107,9 +116,8 @@
 	<div class="player-backdrop" role="presentation" onclick={handleBackdropClick} onkeydown={handleKeydown}>
 		<div class="player-dialog" role="dialog" aria-modal="true" aria-label={activeVideo.title} tabindex="-1">
 			<button class="close-player" onclick={closePlayer} aria-label="关闭播放器">×</button>
-			<video controls autoplay playsinline preload="metadata" poster={base + activeVideo.poster}>
-				<source src={base + activeVideo.mobile_video} type="video/mp4" media="(max-width: 750px)" />
-				<source src={base + activeVideo.video} type="video/mp4" />
+			<video controls autoplay playsinline preload="auto" poster={base + activeVideo.poster}>
+				<source src={base + activeVideoSource} type="video/mp4" />
 			</video>
 			<div class="player-meta">
 				<div><p>NOW PLAYING</p><h2>{activeVideo.title}</h2></div>
