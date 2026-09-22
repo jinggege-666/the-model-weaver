@@ -1,5 +1,37 @@
 [
   {
+    "id": "first-canvas-01",
+    "title": "FIRST CANVAS · 第一章",
+    "subtitle": "Moncho Concha · 00:00–02:31",
+    "duration_seconds": 150.96,
+    "video": "/videos/first-canvas/part-01.mp4",
+    "poster": "/videos/first-canvas/part-01.webp"
+  },
+  {
+    "id": "first-canvas-02",
+    "title": "FIRST CANVAS · 第二章",
+    "subtitle": "Moncho Concha · 02:31–05:07",
+    "duration_seconds": 156.21,
+    "video": "/videos/first-canvas/part-02.mp4",
+    "poster": "/videos/first-canvas/part-02.webp"
+  },
+  {
+    "id": "first-canvas-03",
+    "title": "FIRST CANVAS · 第三章",
+    "subtitle": "Moncho Concha · 05:07–07:31",
+    "duration_seconds": 143.46,
+    "video": "/videos/first-canvas/part-03.mp4",
+    "poster": "/videos/first-canvas/part-03.webp"
+  },
+  {
+    "id": "first-canvas-04",
+    "title": "FIRST CANVAS · 第四章",
+    "subtitle": "Moncho Concha · 07:31–10:02",
+    "duration_seconds": 151.55,
+    "video": "/videos/first-canvas/part-04.mp4",
+    "poster": "/videos/first-canvas/part-04.webp"
+  },
+  {
     "id": "owl-and-badger",
     "title": "OWL AND BADGER",
     "subtitle": "Google DeepMind · PUBLIC DOMAIN",
@@ -54,37 +86,5 @@
     "duration_seconds": 161.6,
     "video": "/videos/execute/part-04.mp4",
     "poster": "/videos/execute/part-04.webp"
-  },
-  {
-    "id": "first-canvas-01",
-    "title": "FIRST CANVAS · 第一章",
-    "subtitle": "Moncho Concha · 00:00–02:31",
-    "duration_seconds": 150.96,
-    "video": "/videos/first-canvas/part-01.mp4",
-    "poster": "/videos/first-canvas/part-01.webp"
-  },
-  {
-    "id": "first-canvas-02",
-    "title": "FIRST CANVAS · 第二章",
-    "subtitle": "Moncho Concha · 02:31–05:07",
-    "duration_seconds": 156.21,
-    "video": "/videos/first-canvas/part-02.mp4",
-    "poster": "/videos/first-canvas/part-02.webp"
-  },
-  {
-    "id": "first-canvas-03",
-    "title": "FIRST CANVAS · 第三章",
-    "subtitle": "Moncho Concha · 05:07–07:31",
-    "duration_seconds": 143.46,
-    "video": "/videos/first-canvas/part-03.mp4",
-    "poster": "/videos/first-canvas/part-03.webp"
-  },
-  {
-    "id": "first-canvas-04",
-    "title": "FIRST CANVAS · 第四章",
-    "subtitle": "Moncho Concha · 07:31–10:02",
-    "duration_seconds": 151.55,
-    "video": "/videos/first-canvas/part-04.mp4",
-    "poster": "/videos/first-canvas/part-04.webp"
   }
 ]

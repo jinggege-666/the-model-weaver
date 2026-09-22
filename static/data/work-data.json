@@ -1,20 +1,20 @@
 [
     {
         "id": "video",
-        "title": "影像作品",
+        "title": "视频作品",
         "details": {
-            "description": "五部精选影像，长片按自然转场整理为连续章节。",
-            "summary": "影像作品"
+            "description": "五部精选视频，长视频按自然转场整理为连续章节。",
+            "summary": "视频作品"
         },
         "roles": [
-            "影像",
+            "视频",
             "视觉叙事",
             "分章呈现"
         ],
         "links": [
             {
                 "type": "web",
-                "text": "进入影像作品集",
+                "text": "进入视频作品集",
                 "link": "/video"
             }
         ]

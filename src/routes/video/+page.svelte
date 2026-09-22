@@ -35,8 +35,8 @@
 </script>
 
 <svelte:head>
-	<title>影像作品 · JINGE</title>
-	<meta name="description" content="JINGE 影像作品集：五部精选影像，以十一个独立播放单元呈现。" />
+	<title>视频作品 · JINGE</title>
+	<meta name="description" content="JINGE 视频作品集：五部精选视频，以十一个独立播放单元呈现。" />
 </svelte:head>
 
 <svelte:window onkeydown={handleKeydown} />
@@ -44,21 +44,21 @@
 <div class="video-page">
 	<header class="site-header">
 		<button class="back-button" onclick={() => returnTo("/")}>← 返回我的主页</button>
-		<span>JINGE · MOVING IMAGE</span>
+		<span>JINGE · VIDEO WORKS</span>
 	</header>
 
 	<main>
 		<section class="hero">
 			<div class="hero-copy">
-				<p class="eyebrow">SELECTED MOVING IMAGE · 2026</p>
-				<h1>影像<br /><em>作品集</em></h1>
-				<p class="intro">五部精选影像，长片按自然转场分章，可从任意片段开始观看。</p>
+				<p class="eyebrow">SELECTED VIDEO WORKS · 2026</p>
+				<h1>视频<br /><em>作品集</em></h1>
+				<p class="intro">五部精选视频，长视频按自然转场分章，可从任意片段开始观看。</p>
 			</div>
 			<div class="hero-stats" aria-label="作品数据">
-				<div><strong>05</strong><span>影像作品</span></div>
+				<div><strong>05</strong><span>视频作品</span></div>
 				<div><strong>11</strong><span>播放单元</span></div>
 				<div><strong>22'</strong><span>总片长</span></div>
-				<div><strong>720P</strong><span>高清影像</span></div>
+				<div><strong>720P</strong><span>高清视频</span></div>
 			</div>
 		</section>
 
@@ -90,13 +90,13 @@
 				{/each}
 			</div>
 
-			<div class="credits" aria-label="影像来源与许可">
+			<div class="credits" aria-label="视频来源与许可">
 				<p class="credit-title">CREDITS / LICENSES</p>
-				<p>OWL AND BADGER · Google DeepMind · Public Domain（按源文件标注）· 网页转码</p>
-				<p>VEO3 CHERNOBYL DECAYING ROOM · Global Donald · <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noreferrer">CC0</a> · 网页转码</p>
-				<p>EXECUTE · Vincent Chang Deng · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noreferrer">CC BY 3.0</a> · 分章与网页转码</p>
-				<p>WITCHES WOOD · Vortex Project Studios · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noreferrer">CC BY 3.0</a> · 网页转码</p>
-				<p>FIRST CANVAS · Moncho Concha · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noreferrer">CC BY 3.0</a> · 分章与网页转码</p>
+				<p>OWL AND BADGER · Google DeepMind · Public Domain（按源文件标注）· 网页转码与 JINGE 水印</p>
+				<p>VEO3 CHERNOBYL DECAYING ROOM · Global Donald · <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noreferrer">CC0</a> · 网页转码与 JINGE 水印</p>
+				<p>EXECUTE · Vincent Chang Deng · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noreferrer">CC BY 3.0</a> · 分章、网页转码与 JINGE 水印</p>
+				<p>WITCHES WOOD · Vortex Project Studios · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noreferrer">CC BY 3.0</a> · 网页转码与 JINGE 水印</p>
+				<p>FIRST CANVAS · Moncho Concha · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noreferrer">CC BY 3.0</a> · 分章、网页转码与 JINGE 水印</p>
 			</div>
 		</section>
 	</main>
