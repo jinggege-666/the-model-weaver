@@ -9,6 +9,7 @@
 		subtitle: string;
 		duration_seconds: number;
 		video: string;
+		mobile_video: string;
 		poster: string;
 	};
 
@@ -107,6 +108,7 @@
 		<div class="player-dialog" role="dialog" aria-modal="true" aria-label={activeVideo.title} tabindex="-1">
 			<button class="close-player" onclick={closePlayer} aria-label="关闭播放器">×</button>
 			<video controls autoplay playsinline preload="metadata" poster={base + activeVideo.poster}>
+				<source src={base + activeVideo.mobile_video} type="video/mp4" media="(max-width: 750px)" />
 				<source src={base + activeVideo.video} type="video/mp4" />
 			</video>
 			<div class="player-meta">
