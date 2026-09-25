@@ -34,7 +34,7 @@
 
 	onMount(() => {
 		const playHeroVideo = async () => {
-			if (window.matchMedia("(max-width: 750px)").matches) {
+			if (window.matchMedia("(max-width: 750px), (hover: none) and (pointer: coarse)").matches) {
 				heroVideoNeedsTap = false;
 				return;
 			}
@@ -427,7 +427,8 @@
 		width: 100% !important
 		margin-left: 0 !important
 
-@media only screen and (max-width: 750px)
+// Phones and touch-first tablets (including iPad) use the animated image fallback.
+@media only screen and (max-width: 750px), (hover: none) and (pointer: coarse)
 	.desktop-motion
 		display: none !important
 
@@ -436,6 +437,8 @@
 
 	.home-image
 		object-position: 30% center !important
+
+@media only screen and (max-width: 750px)
 
 	.occupation
 		width: 100%
