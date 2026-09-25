@@ -1,6 +1,7 @@
 <script lang="ts">
 
 	import { animate, stagger } from "animejs";
+	import { base } from "$app/paths";
 	import { onMount } from "svelte";
 	import { loadPagePromise } from "$lib/store";
 	import { loadImage } from "$lib/utils";
@@ -176,9 +177,18 @@
 			</div>
 
 			<div class="parallax-wrapper home-back" bind:this={backgroundContainerElement}>
-				{#await loadImage("assets/imgs/home-back-person.jpg") then src}
-					<img class="home-image" src="{src}" loading="eager" fetchpriority="high" decoding="async" bind:this={backgroundImageElement} draggable="false" alt="Jinge portrait hero background">
-				{/await}
+				<video
+					class="home-image"
+					src={`${base}/assets/video/home-hero-loop.mp4`}
+					poster={`${base}/assets/imgs/home-back-person.jpg`}
+					autoplay
+					muted
+					loop
+					playsinline
+					preload="metadata"
+					bind:this={backgroundImageElement}
+					aria-label="Jinge portrait hero background"
+				></video>
 			</div>
 		</div>
 	</div>
@@ -296,7 +306,8 @@
 			&
 				opacity: 0.3
 
-		img
+		.home-image
+			display: block
 			height: 100%
 			width: 100%
 			object-fit: cover
