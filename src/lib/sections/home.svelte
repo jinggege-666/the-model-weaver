@@ -180,7 +180,7 @@
 				<video
 					class="home-image"
 					src={`${base}/assets/video/home-hero-loop.mp4`}
-					poster={`${base}/assets/imgs/home-back-person.jpg`}
+					poster={`${base}/assets/imgs/home-back-person-open.jpg`}
 					autoplay
 					muted
 					loop

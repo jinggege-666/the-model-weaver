@@ -10,3 +10,7 @@ node_modules
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 *.log
+
+# Local-only keyframe used to render the animated homepage hero
+/static/assets/imgs/home-person-eyes-open.png
+/docs/assets/imgs/home-person-eyes-open.png
