@@ -10,7 +10,8 @@
 	// DOM Node Binds for animations
 	let homeContainerElement: HTMLElement = $state()!; // Container
 	let backgroundContainerElement: HTMLElement = $state()!;
-	let backgroundImageElement: HTMLVideoElement = $state()!; // Offsets and playback
+	let backgroundImageElement: HTMLElement = $state()!; // Visual offset wrapper
+	let heroVideoElement: HTMLVideoElement = $state()!;
 	let heroVideoNeedsTap = $state(false);
 	const mobilePlaybackAttributes = {
 		"webkit-playsinline": "true",
@@ -33,11 +34,15 @@
 
 	onMount(() => {
 		const playHeroVideo = async () => {
-			if (!backgroundImageElement) return;
-			backgroundImageElement.muted = true;
-			backgroundImageElement.defaultMuted = true;
+			if (window.matchMedia("(max-width: 750px)").matches) {
+				heroVideoNeedsTap = false;
+				return;
+			}
+			if (!heroVideoElement) return;
+			heroVideoElement.muted = true;
+			heroVideoElement.defaultMuted = true;
 			try {
-				await backgroundImageElement.play();
+				await heroVideoElement.play();
 				heroVideoNeedsTap = false;
 			} catch {
 				heroVideoNeedsTap = true;
@@ -45,8 +50,8 @@
 		};
 
 		void playHeroVideo();
-		backgroundImageElement.addEventListener("loadeddata", playHeroVideo);
-		backgroundImageElement.addEventListener("canplay", playHeroVideo);
+		heroVideoElement.addEventListener("loadeddata", playHeroVideo);
+		heroVideoElement.addEventListener("canplay", playHeroVideo);
 		const resumeAfterVisibilityChange = () => {
 			if (!document.hidden) void playHeroVideo();
 		};
@@ -68,8 +73,8 @@
 		});
 
 		return () => {
-			backgroundImageElement?.removeEventListener("loadeddata", playHeroVideo);
-			backgroundImageElement?.removeEventListener("canplay", playHeroVideo);
+			heroVideoElement?.removeEventListener("loadeddata", playHeroVideo);
+			heroVideoElement?.removeEventListener("canplay", playHeroVideo);
 			document.removeEventListener("visibilitychange", resumeAfterVisibilityChange);
 			window.removeEventListener("pageshow", resumeAfterPageShow);
 		};
@@ -214,25 +219,31 @@
 			</div>
 
 			<div class="parallax-wrapper home-back" bind:this={backgroundContainerElement}>
-				<video
-					class="home-image"
-					poster={`${base}/assets/imgs/home-hero-kling-poster.jpg`}
-					autoplay
-					muted
-					loop
-					playsinline
-					{...mobilePlaybackAttributes}
-					preload="auto"
-					disablepictureinpicture
-					onplay={() => heroVideoNeedsTap = false}
-					bind:this={backgroundImageElement}
-					aria-label="Jinge portrait hero background"
-				>
-					<source src={`${base}/assets/video/home-hero-kling-loop-mobile.mp4`} type="video/mp4" media="(max-width: 750px)" />
-					<source src={`${base}/assets/video/home-hero-kling-loop.mp4`} type="video/mp4" />
-				</video>
+				<div class="home-media" bind:this={backgroundImageElement}>
+					<video
+						class="home-image desktop-motion"
+						poster={`${base}/assets/imgs/home-hero-kling-poster.jpg`}
+						autoplay
+						muted
+						loop
+						playsinline
+						{...mobilePlaybackAttributes}
+						preload="auto"
+						disablepictureinpicture
+						onplay={() => heroVideoNeedsTap = false}
+						bind:this={heroVideoElement}
+						aria-label="Jinge portrait hero background"
+					>
+						<source src={`${base}/assets/video/home-hero-kling-loop.mp4`} type="video/mp4" />
+					</video>
+					<img
+						class="home-image mobile-motion"
+						src={`${base}/assets/imgs/home-hero-kling-loop-mobile.webp`}
+						alt="Jinge portrait hero motion"
+					/>
+				</div>
 				{#if heroVideoNeedsTap}
-					<button class="hero-video-play" type="button" onclick={() => backgroundImageElement?.play()} aria-label="播放封面动效">
+					<button class="hero-video-play" type="button" onclick={() => heroVideoElement?.play()} aria-label="播放封面动效">
 						<span>▶</span> 轻触播放动效
 					</button>
 				{/if}
@@ -353,6 +364,10 @@
 			&
 				opacity: 0.3
 
+		.home-media
+			height: 100%
+			width: 100%
+
 		.home-image
 			display: block
 			height: 100%
@@ -360,6 +375,9 @@
 			object-fit: cover
 			object-position: center center
 			border-radius: 1.5vh
+
+		.mobile-motion
+			display: none
 
 		.hero-video-play
 			position: absolute
@@ -410,6 +428,12 @@
 		margin-left: 0 !important
 
 @media only screen and (max-width: 750px)
+	.desktop-motion
+		display: none !important
+
+	.mobile-motion
+		display: block !important
+
 	.home-image
 		object-position: 30% center !important
 
