@@ -122,14 +122,14 @@
 
 <style>
 	:global(html), :global(body) { margin: 0; min-height: 100%; background: #0b0b0d; color: #f5f1e9; }
-	:global(body) { overflow: auto; font-family: "PingFang SC", "Microsoft YaHei", sans-serif; }
+	:global(body) { overflow: hidden; font-family: "PingFang SC", "Microsoft YaHei", sans-serif; }
 	:global(*) { box-sizing: border-box; }
-	.video-page { min-height: 100vh; background: radial-gradient(circle at 80% 5%, rgba(176,120,65,.16), transparent 28rem), #0b0b0d; }
+	.video-page { height: 100vh; height: 100dvh; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-gutter: stable; -webkit-overflow-scrolling: touch; background: radial-gradient(circle at 80% 5%, rgba(176,120,65,.16), transparent 28rem), #0b0b0d; }
 	.site-header { position: sticky; top: 0; z-index: 30; height: 62px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(18px, 4vw, 64px); border-bottom: 1px solid rgba(255,255,255,.09); background: rgba(11,11,13,.84); backdrop-filter: blur(18px); }
 	.site-header span { color: #a89d8d; font-size: 12px; letter-spacing: .18em; }
 	.back-button { border: 0; padding: 10px 0; color: #d9b98a; background: none; font-size: 13px; cursor: pointer; }
 	main { width: min(1480px, 100%); margin: 0 auto; padding: 0 clamp(18px, 5vw, 76px) 120px; }
-	.hero { min-height: 76vh; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(260px, .7fr); align-items: end; gap: 8vw; padding: 15vh 0 11vh; border-bottom: 1px solid rgba(255,255,255,.12); }
+	.hero { min-height: 60dvh; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(260px, .7fr); align-items: end; gap: 8vw; padding: 10dvh 0 7dvh; border-bottom: 1px solid rgba(255,255,255,.12); }
 	.eyebrow, .section-index { margin: 0 0 24px; color: #c6a678; font-size: 11px; letter-spacing: .2em; }
 	h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(70px, 10vw, 150px); font-weight: 400; line-height: 1; letter-spacing: -.065em; }
 	h1 em { color: #d6b37e; font-weight: 400; }
@@ -138,7 +138,7 @@
 	.hero-stats div { display: flex; align-items: baseline; justify-content: space-between; padding: 20px 4px; border-bottom: 1px solid rgba(255,255,255,.14); }
 	.hero-stats strong { font-family: Georgia, serif; color: #ede5d7; font-size: clamp(38px, 4vw, 64px); font-weight: 400; }
 	.hero-stats span { color: #89857e; font-size: 12px; letter-spacing: .12em; }
-	.collection { padding-top: 110px; }
+	.collection { padding-top: clamp(56px, 7dvh, 82px); }
 	.collection-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 48px; }
 	.collection-head h2 { margin: 0; font-family: Georgia, serif; font-size: clamp(44px, 6vw, 84px); font-weight: 400; letter-spacing: -.045em; }
 	.chapter-count { margin: 0; color: #777169; font-size: 11px; letter-spacing: .18em; }
@@ -167,6 +167,16 @@
 	@media (max-width: 950px) {
 		.hero { min-height: auto; grid-template-columns: 1fr; padding-top: 15vh; }
 		.hero-stats { margin-top: 30px; }
+	}
+	@media (min-width: 951px) and (max-height: 650px) {
+		.hero { min-height: auto; padding: 70px 0 42px; }
+		h1 { font-size: clamp(54px, 15vh, 82px); }
+		.intro { margin-top: 18px; font-size: 14px; line-height: 1.55; }
+		.hero-stats div { padding: 10px 4px; }
+		.hero-stats strong { font-size: clamp(28px, 8vh, 44px); }
+		.collection { padding-top: 36px; }
+		.collection-head { margin-bottom: 28px; }
+		.collection-head h2 { font-size: 42px; }
 	}
 	@media (max-width: 620px) {
 		.site-header { height: 54px; }

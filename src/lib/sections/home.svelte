@@ -348,6 +348,23 @@
 			font-size: clamp(14px, 3.8vw, 17px) !important
 			line-height: 1.5 !important
 
+@media only screen and (min-width: 751px) and (max-height: 650px)
+	#content-container
+		padding-top: 18vh !important
+		padding-bottom: 7vh
+
+		.flex-wrapper.second
+			justify-content: center
+
+		.title
+			font-size: clamp(54px, 18vh, 92px)
+
+		.occupation
+			margin-top: 4vh
+
+		.action-mask
+			margin-top: 4vh
+
 
 #signature
 	.path-1
