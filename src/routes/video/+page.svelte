@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { base } from "$app/paths";
+	import { onMount } from "svelte";
 	import { returnTo } from "$lib/return-navigation";
 	import videoData from "../../../static/data/video-works.json";
 
@@ -14,6 +15,7 @@
 	};
 
 	const videos = videoData as VideoWork[];
+	let fade = $state(false);
 	let activeVideo = $state<VideoWork | null>(null);
 	let activeVideoSource = $state("");
 
@@ -37,6 +39,8 @@
 		if (event.target === event.currentTarget) closePlayer();
 	}
 
+	onMount(() => { setTimeout(() => (fade = true), 50); });
+
 </script>
 
 <svelte:head>
@@ -46,34 +50,22 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="video-page">
-	<header class="site-header">
-		<button class="back-button" onclick={() => returnTo("/")}>← 返回我的主页</button>
-		<span>JINGE · VIDEO WORKS</span>
-	</header>
-
+<div class="video-page" class:fade>
 	<main>
-		<section class="hero">
-			<div class="hero-copy">
-				<p class="eyebrow">SELECTED VIDEO WORKS · 2026</p>
-				<h1>视频<br /><em>作品集</em></h1>
-				<p class="intro">五部精选视频，长视频按自然转场分章，可从任意片段开始观看。</p>
-			</div>
-			<div class="hero-stats" aria-label="作品数据">
-				<div><strong>05</strong><span>视频作品</span></div>
-				<div><strong>10</strong><span>播放单元</span></div>
-				<div><strong>19'</strong><span>总片长</span></div>
-				<div><strong>AUTO</strong><span>画质适配</span></div>
-			</div>
+		<section class="head">
+			<button class="back" onclick={() => returnTo("/")}>← 返回首页</button>
+			<div class="badge">THE MODEL WEAVER · VIDEO</div>
+			<h1>视频<span>作品</span></h1>
+			<p class="tag">五部精选视频 · 长视频按自然转场分章 · 点击即可播放</p>
 		</section>
 
 		<section class="collection" aria-labelledby="collection-title">
 			<div class="collection-head">
 				<div>
-					<p class="section-index">01 / FILM</p>
-					<h2 id="collection-title">SELECTED FILMS</h2>
+					<p class="section-index">SELECTED FILMS · 2026</p>
+					<h2 id="collection-title">精选视频</h2>
 				</div>
-				<p class="chapter-count">10 CLIPS</p>
+				<p class="chapter-count">05 部作品 · 10 个播放单元 · 19'</p>
 			</div>
 
 			<div class="video-grid">
@@ -124,24 +116,21 @@
 	:global(html), :global(body) { margin: 0; min-height: 100%; background: #0b0b0d; color: #f5f1e9; }
 	:global(body) { overflow: hidden; font-family: "PingFang SC", "Microsoft YaHei", sans-serif; }
 	:global(*) { box-sizing: border-box; }
-	.video-page { height: 100vh; height: 100dvh; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-gutter: stable; -webkit-overflow-scrolling: touch; background: radial-gradient(circle at 80% 5%, rgba(176,120,65,.16), transparent 28rem), #0b0b0d; }
-	.site-header { position: sticky; top: 0; z-index: 30; height: 62px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(18px, 4vw, 64px); border-bottom: 1px solid rgba(255,255,255,.09); background: rgba(11,11,13,.84); backdrop-filter: blur(18px); }
-	.site-header span { color: #a89d8d; font-size: 12px; letter-spacing: .18em; }
-	.back-button { border: 0; padding: 10px 0; color: #d9b98a; background: none; font-size: 13px; cursor: pointer; }
-	main { width: min(1480px, 100%); margin: 0 auto; padding: 0 clamp(18px, 5vw, 76px) 120px; }
-	.hero { min-height: 60dvh; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(260px, .7fr); align-items: end; gap: 8vw; padding: 10dvh 0 7dvh; border-bottom: 1px solid rgba(255,255,255,.12); }
-	.eyebrow, .section-index { margin: 0 0 24px; color: #c6a678; font-size: 11px; letter-spacing: .2em; }
-	h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(70px, 10vw, 150px); font-weight: 400; line-height: 1; letter-spacing: -.065em; }
-	h1 em { color: #d6b37e; font-weight: 400; }
-	.intro { width: min(590px, 100%); margin: 45px 0 0; color: #aaa59c; font-size: clamp(15px, 1.4vw, 19px); line-height: 1.9; }
-	.hero-stats { display: grid; gap: 0; border-top: 1px solid rgba(255,255,255,.14); }
-	.hero-stats div { display: flex; align-items: baseline; justify-content: space-between; padding: 20px 4px; border-bottom: 1px solid rgba(255,255,255,.14); }
-	.hero-stats strong { font-family: Georgia, serif; color: #ede5d7; font-size: clamp(38px, 4vw, 64px); font-weight: 400; }
-	.hero-stats span { color: #89857e; font-size: 12px; letter-spacing: .12em; }
-	.collection { padding-top: clamp(56px, 7dvh, 82px); }
+	.video-page { height: 100vh; height: 100dvh; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-gutter: stable; -webkit-overflow-scrolling: touch; background: #0e0e10; opacity: 0; transform: translateY(14px); transition: opacity .7s ease, transform .7s ease; }
+	.video-page.fade { opacity: 1; transform: none; }
+	main { width: min(1180px, 100%); margin: 0 auto; padding: 48px 24px 80px; }
+	.head { position: relative; padding: 20px 0 34px; text-align: center; }
+	.back { position: absolute; left: 0; top: 24px; border: 1px solid #2a2a2e; border-radius: 999px; padding: 7px 16px; color: #a7a7ad; background: transparent; font-size: 14px; cursor: pointer; }
+	.back:hover { color: #f2f2f2; border-color: #555; }
+	.badge { display: inline-block; margin-bottom: 22px; border: 1px solid #2a2a2e; border-radius: 999px; padding: 6px 16px; color: #a7a7ad; font-size: 13px; letter-spacing: .12em; }
+	h1 { margin: 0; color: #f2f2f2; font-family: "Songti SC", "Noto Serif SC", "STSong", "SimSun", serif; font-size: clamp(38px, 6vw, 68px); font-weight: 700; line-height: 1.06; }
+	h1 span { color: transparent; background: linear-gradient(90deg, #7c8cff, #ff7c9b); background-clip: text; -webkit-background-clip: text; }
+	.tag { margin: 16px 0 0; color: #a7a7ad; font-size: 17px; }
+	.collection { margin-top: 24px; padding-top: 34px; border-top: 1px solid #2a2a2e; }
 	.collection-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 48px; }
-	.collection-head h2 { margin: 0; font-family: Georgia, serif; font-size: clamp(44px, 6vw, 84px); font-weight: 400; letter-spacing: -.045em; }
-	.chapter-count { margin: 0; color: #777169; font-size: 11px; letter-spacing: .18em; }
+	.section-index { margin: 0 0 10px; color: #7c8cff; font-size: 11px; letter-spacing: .18em; }
+	.collection-head h2 { margin: 0; color: #f2f2f2; font-size: 28px; font-weight: 600; }
+	.chapter-count { margin: 0; color: #777169; font-size: 12px; letter-spacing: .08em; }
 	.video-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 54px 22px; }
 	.video-card { min-width: 0; }
 	.poster-button { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border: 0; padding: 0; background: #18181b; cursor: pointer; }
@@ -165,27 +154,14 @@
 	.player-meta p { margin: 0 0 6px; color: #817b72; font-size: 9px; letter-spacing: .2em; }
 	.player-meta h2 { margin: 0; font-size: 20px; font-weight: 500; }
 	@media (max-width: 950px) {
-		.hero { min-height: auto; grid-template-columns: 1fr; padding-top: 15vh; }
-		.hero-stats { margin-top: 30px; }
-	}
-	@media (min-width: 951px) and (max-height: 650px) {
-		.hero { min-height: auto; padding: 70px 0 42px; }
-		h1 { font-size: clamp(54px, 15vh, 82px); }
-		.intro { margin-top: 18px; font-size: 14px; line-height: 1.55; }
-		.hero-stats div { padding: 10px 4px; }
-		.hero-stats strong { font-size: clamp(28px, 8vh, 44px); }
-		.collection { padding-top: 36px; }
-		.collection-head { margin-bottom: 28px; }
-		.collection-head h2 { font-size: 42px; }
+		.back { position: static; display: block; width: fit-content; margin: 0 0 18px; }
 	}
 	@media (max-width: 620px) {
-		.site-header { height: 54px; }
-		.site-header span { font-size: 10px; }
-		main { padding-bottom: 80px; }
-		.hero { padding-bottom: 70px; }
-		h1 { font-size: clamp(64px, 22vw, 100px); }
-		.intro { margin-top: 32px; font-size: 15px; }
-		.collection { padding-top: 72px; }
+		main { padding: 30px 16px 64px; }
+		.head { padding-top: 0; }
+		h1 { font-size: clamp(38px, 13vw, 58px); }
+		.tag { font-size: 15px; line-height: 1.6; }
+		.collection { margin-top: 12px; padding-top: 28px; }
 		.collection-head { align-items: flex-start; flex-direction: column; }
 		.video-grid { grid-template-columns: 1fr; gap: 42px; }
 		.play { opacity: 1; width: 50px; height: 50px; }
