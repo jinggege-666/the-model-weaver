@@ -179,8 +179,8 @@
 			<div class="parallax-wrapper home-back" bind:this={backgroundContainerElement}>
 				<video
 					class="home-image"
-					src={`${base}/assets/video/home-hero-loop.mp4`}
-					poster={`${base}/assets/imgs/home-back-person-open.jpg`}
+					src={`${base}/assets/video/home-hero-kling-loop.mp4`}
+					poster={`${base}/assets/imgs/home-hero-kling-poster.jpg`}
 					autoplay
 					muted
 					loop
