@@ -241,6 +241,11 @@
 						src={`${base}/assets/imgs/home-hero-kling-loop-mobile.webp`}
 						alt="Jinge portrait hero motion"
 					/>
+					<img
+						class="home-image ipad-motion"
+						src={`${base}/assets/imgs/home-hero-kling-loop-ipad.gif`}
+						alt="Jinge portrait hero motion"
+					/>
 				</div>
 				{#if heroVideoNeedsTap}
 					<button class="hero-video-play" type="button" onclick={() => heroVideoElement?.play()} aria-label="播放封面动效">
@@ -379,6 +384,9 @@
 		.mobile-motion
 			display: none
 
+		.ipad-motion
+			display: none
+
 		.hero-video-play
 			position: absolute
 			left: 50%
@@ -427,18 +435,19 @@
 		width: 100% !important
 		margin-left: 0 !important
 
-// Phones and touch-first tablets (including iPad) use the animated image fallback.
-@media only screen and (max-width: 750px), (hover: none) and (pointer: coarse)
+// Phones use animated WebP; iPad gets a GIF fallback for older Safari/WebKit.
+@media only screen and (max-width: 750px)
 	.desktop-motion
 		display: none !important
 
 	.mobile-motion
 		display: block !important
 
+	.ipad-motion
+		display: none !important
+
 	.home-image
 		object-position: 30% center !important
-
-@media only screen and (max-width: 750px)
 
 	.occupation
 		width: 100%
@@ -450,6 +459,14 @@
 			white-space: normal
 			font-size: clamp(14px, 3.8vw, 17px) !important
 			line-height: 1.5 !important
+
+:global(.touch-tablet) .desktop-motion,
+:global(.touch-tablet) .mobile-motion
+	display: none !important
+
+:global(.touch-tablet) .ipad-motion
+	display: block !important
+	object-position: 30% center !important
 
 @media only screen and (min-width: 751px) and (max-height: 650px)
 	#content-container

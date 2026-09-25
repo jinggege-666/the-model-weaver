@@ -99,7 +99,7 @@
 
 		// Use the lightweight image slider on every device. The previous WebGL
 		// distortion effect added a large download and could race lazy images.
-		viewPortState.isMobile = window.innerWidth <= 950;
+		viewPortState.isMobile = window.innerWidth <= 950 || navigator.maxTouchPoints > 0 || window.matchMedia("(pointer: coarse)").matches;
 
 		await loadPagePromise;
 		scrollAnchorState.work = workContainer;

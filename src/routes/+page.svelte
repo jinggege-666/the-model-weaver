@@ -27,6 +27,12 @@
 	});
 
 	onMount(async () => {
+		const isTouchDevice = navigator.maxTouchPoints > 0 || window.matchMedia("(pointer: coarse)").matches;
+		const isTouchTablet = isTouchDevice && window.innerWidth > 750;
+		document.documentElement.classList.toggle("touch-device", isTouchDevice);
+		document.documentElement.classList.toggle("touch-tablet", isTouchTablet);
+		viewPortState.isMobile = isTouchDevice || window.innerWidth <= 950;
+
 		const savedScroll = Number(sessionStorage.getItem("jinge:home-scroll"));
 		sessionStorage.removeItem("jinge:home-scroll");
 		// Disable scrolling on initial load
@@ -42,14 +48,22 @@
 		devMsg();
 
 		// Resolve slickScroll promise and pass momentumScroll's value
-		viewPortState.slickscrollInstance = new (slickScroll as any)({
-			root: scrollContainer,
-			easing: "easeOutCirc",
-			duration: 1500,
-			fixedOffsets: [
-				navBar
-			]
-		});
+		if (isTouchDevice) {
+			// Native scrolling keeps nested horizontal galleries responsive on iPad.
+			viewPortState.slickscrollInstance = {
+				addOffset: () => {},
+				removeOffset: () => {},
+				addFixedOffset: () => {},
+				destroy: () => {}
+			};
+		} else {
+			viewPortState.slickscrollInstance = new (slickScroll as any)({
+				root: scrollContainer,
+				easing: "easeOutCirc",
+				duration: 1500,
+				fixedOffsets: [navBar]
+			});
+		}
 
 		// Enable scrolling
 		scrollContainer.style.overflowX = "hidden";
