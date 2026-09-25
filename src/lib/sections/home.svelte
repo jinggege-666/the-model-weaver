@@ -10,7 +10,14 @@
 	// DOM Node Binds for animations
 	let homeContainerElement: HTMLElement = $state()!; // Container
 	let backgroundContainerElement: HTMLElement = $state()!;
-	let backgroundImageElement: HTMLElement = $state()!; // Offsets
+	let backgroundImageElement: HTMLVideoElement = $state()!; // Offsets and playback
+	let heroVideoNeedsTap = $state(false);
+	const mobilePlaybackAttributes = {
+		"webkit-playsinline": "true",
+		"x5-playsinline": "true",
+		"x5-video-player-type": "h5-page",
+		"x5-video-player-fullscreen": "false"
+	};
 
 	// Elements for animations
 	let titleWord1Element: HTMLElement = $state()!; 
@@ -24,18 +31,48 @@
 	let signaturePath3: SVGPathElement = $state()!; 
 	let signaturePath4: SVGPathElement = $state()!;
 
-	onMount(async () => {
-		await loadPagePromise;
-		// Set navbar home link's y location to top of homeContainer
-		scrollAnchorState.home = homeContainerElement;
+	onMount(() => {
+		const playHeroVideo = async () => {
+			if (!backgroundImageElement) return;
+			backgroundImageElement.muted = true;
+			backgroundImageElement.defaultMuted = true;
+			try {
+				await backgroundImageElement.play();
+				heroVideoNeedsTap = false;
+			} catch {
+				heroVideoNeedsTap = true;
+			}
+		};
 
-		// Add parallax scrolling offsets to slickScroll
-		viewPortState.slickscrollInstance!.addOffset({
-			element: backgroundContainerElement,
-			speedY: 0.8
+		void playHeroVideo();
+		backgroundImageElement.addEventListener("loadeddata", playHeroVideo);
+		backgroundImageElement.addEventListener("canplay", playHeroVideo);
+		const resumeAfterVisibilityChange = () => {
+			if (!document.hidden) void playHeroVideo();
+		};
+		const resumeAfterPageShow = () => void playHeroVideo();
+		document.addEventListener("visibilitychange", resumeAfterVisibilityChange);
+		window.addEventListener("pageshow", resumeAfterPageShow);
+
+		void loadPagePromise.then(() => {
+			// Set navbar home link's y location to top of homeContainer
+			scrollAnchorState.home = homeContainerElement;
+
+			// Add parallax scrolling offsets to slickScroll
+			viewPortState.slickscrollInstance!.addOffset({
+				element: backgroundContainerElement,
+				speedY: 0.8
+			});
+
+			introAnimations();
 		});
 
-		introAnimations();
+		return () => {
+			backgroundImageElement?.removeEventListener("loadeddata", playHeroVideo);
+			backgroundImageElement?.removeEventListener("canplay", playHeroVideo);
+			document.removeEventListener("visibilitychange", resumeAfterVisibilityChange);
+			window.removeEventListener("pageshow", resumeAfterPageShow);
+		};
 	})
 
 
@@ -179,16 +216,26 @@
 			<div class="parallax-wrapper home-back" bind:this={backgroundContainerElement}>
 				<video
 					class="home-image"
-					src={`${base}/assets/video/home-hero-kling-loop.mp4`}
 					poster={`${base}/assets/imgs/home-hero-kling-poster.jpg`}
 					autoplay
 					muted
 					loop
 					playsinline
-					preload="metadata"
+					{...mobilePlaybackAttributes}
+					preload="auto"
+					disablepictureinpicture
+					onplay={() => heroVideoNeedsTap = false}
 					bind:this={backgroundImageElement}
 					aria-label="Jinge portrait hero background"
-				></video>
+				>
+					<source src={`${base}/assets/video/home-hero-kling-loop-mobile.mp4`} type="video/mp4" media="(max-width: 750px)" />
+					<source src={`${base}/assets/video/home-hero-kling-loop.mp4`} type="video/mp4" />
+				</video>
+				{#if heroVideoNeedsTap}
+					<button class="hero-video-play" type="button" onclick={() => backgroundImageElement?.play()} aria-label="播放封面动效">
+						<span>▶</span> 轻触播放动效
+					</button>
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -313,6 +360,20 @@
 			object-fit: cover
 			object-position: center center
 			border-radius: 1.5vh
+
+		.hero-video-play
+			position: absolute
+			left: 50%
+			bottom: 1.5rem
+			transform: translateX(-50%)
+			z-index: 3
+			border: 1px solid rgba(255,255,255,.55)
+			border-radius: 999px
+			padding: .65rem 1rem
+			background: rgba(0,0,0,.55)
+			color: white
+			font: inherit
+			white-space: nowrap
 
 @media only screen and (min-width: 1250px)
 	.h-signature
