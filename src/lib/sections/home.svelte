@@ -176,8 +176,8 @@
 			</div>
 
 			<div class="parallax-wrapper home-back" bind:this={backgroundContainerElement}>
-				{#await loadImage("assets/imgs/home-back.jpg") then src}
-					<img src="{src}" loading="eager" fetchpriority="high" decoding="async" bind:this={backgroundImageElement} draggable="false" alt="Home Background" style="width:100%; height: 100%; object-fit: cover;">
+				{#await loadImage("assets/imgs/home-back-person.jpg") then src}
+					<img class="home-image" src="{src}" loading="eager" fetchpriority="high" decoding="async" bind:this={backgroundImageElement} draggable="false" alt="Jinge portrait hero background">
 				{/await}
 			</div>
 		</div>
@@ -300,6 +300,7 @@
 			height: 100%
 			width: 100%
 			object-fit: cover
+			object-position: center center
 			border-radius: 1.5vh
 
 @media only screen and (min-width: 1250px)
@@ -337,6 +338,9 @@
 		margin-left: 0 !important
 
 @media only screen and (max-width: 750px)
+	.home-image
+		object-position: 30% center !important
+
 	.occupation
 		width: 100%
 		overflow: visible !important
