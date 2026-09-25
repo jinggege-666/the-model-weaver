@@ -88,14 +88,5 @@
     "video": "/videos/execute/part-03.mp4",
     "mobile_video": "/videos/execute/part-03-mobile.mp4",
     "poster": "/videos/execute/part-03.webp"
-  },
-  {
-    "id": "execute-04",
-    "title": "EXECUTE · 第四章",
-    "subtitle": "Vincent Chang Deng · 07:22–10:03",
-    "duration_seconds": 161.6,
-    "video": "/videos/execute/part-04.mp4",
-    "mobile_video": "/videos/execute/part-04-mobile.mp4",
-    "poster": "/videos/execute/part-04.webp"
   }
 ]

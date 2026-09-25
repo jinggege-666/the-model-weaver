@@ -37,16 +37,11 @@
 		if (event.target === event.currentTarget) closePlayer();
 	}
 
-	function formatDuration(seconds: number) {
-		const minutes = Math.floor(seconds / 60);
-		const remainder = Math.round(seconds % 60);
-		return `${minutes}:${String(remainder).padStart(2, "0")}`;
-	}
 </script>
 
 <svelte:head>
 	<title>视频作品 · JINGE</title>
-	<meta name="description" content="JINGE 视频作品集：五部精选视频，以十一个独立播放单元呈现。" />
+	<meta name="description" content="JINGE 视频作品集：五部精选视频，以十个独立播放单元呈现。" />
 </svelte:head>
 
 <svelte:window onkeydown={handleKeydown} />
@@ -66,8 +61,8 @@
 			</div>
 			<div class="hero-stats" aria-label="作品数据">
 				<div><strong>05</strong><span>视频作品</span></div>
-				<div><strong>11</strong><span>播放单元</span></div>
-				<div><strong>22'</strong><span>总片长</span></div>
+				<div><strong>10</strong><span>播放单元</span></div>
+				<div><strong>19'</strong><span>总片长</span></div>
 				<div><strong>AUTO</strong><span>画质适配</span></div>
 			</div>
 		</section>
@@ -78,7 +73,7 @@
 					<p class="section-index">01 / FILM</p>
 					<h2 id="collection-title">SELECTED FILMS</h2>
 				</div>
-				<p class="chapter-count">11 CLIPS</p>
+				<p class="chapter-count">10 CLIPS</p>
 			</div>
 
 			<div class="video-grid">
@@ -87,7 +82,6 @@
 						<button class="poster-button" onclick={() => openPlayer(item)} aria-label={`播放：${item.title}`}>
 							<img src={base + item.poster} alt={item.title} loading={index === 0 ? "eager" : "lazy"} decoding="async" />
 							<span class="play" aria-hidden="true">▶</span>
-							<span class="duration">{formatDuration(item.duration_seconds)}</span>
 						</button>
 						<div class="card-meta">
 							<span class="number">{String(index + 1).padStart(2, "0")}</span>
@@ -121,7 +115,6 @@
 			</video>
 			<div class="player-meta">
 				<div><p>NOW PLAYING</p><h2>{activeVideo.title}</h2></div>
-				<span class="player-duration">{formatDuration(activeVideo.duration_seconds)}</span>
 			</div>
 		</div>
 	</div>
@@ -156,7 +149,6 @@
 	.poster-button:hover img { transform: scale(1.035); filter: brightness(.7); }
 	.play { position: absolute; inset: 50% auto auto 50%; display: grid; width: 58px; height: 58px; place-items: center; border: 1px solid rgba(255,255,255,.55); border-radius: 50%; color: white; background: rgba(10,10,12,.32); transform: translate(-50%,-50%); opacity: 0; transition: opacity .35s ease, transform .35s ease; backdrop-filter: blur(8px); }
 	.poster-button:hover .play, .poster-button:focus-visible .play { opacity: 1; transform: translate(-50%,-50%) scale(1.05); }
-	.duration { position: absolute; right: 10px; bottom: 10px; padding: 5px 7px; border-radius: 2px; color: white; background: rgba(0,0,0,.65); font-size: 11px; }
 	.card-meta { display: grid; grid-template-columns: 32px 1fr; gap: 12px; align-items: start; padding-top: 16px; }
 	.number { color: #706d67; font-family: Georgia, serif; font-size: 13px; }
 	.card-meta h3 { margin: 0 0 7px; color: #eee9df; font-size: 16px; font-weight: 500; }
@@ -169,10 +161,9 @@
 	.player-dialog { position: relative; width: min(1100px, 100%); background: #111114; box-shadow: 0 25px 100px rgba(0,0,0,.6); }
 	.player-dialog video { display: block; width: 100%; max-height: 72vh; background: black; }
 	.close-player { position: absolute; z-index: 2; top: -46px; right: 0; border: 0; color: white; background: transparent; font-size: 34px; font-weight: 200; cursor: pointer; }
-	.player-meta { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 26px; }
+	.player-meta { display: flex; align-items: center; justify-content: flex-start; gap: 24px; padding: 22px 26px; }
 	.player-meta p { margin: 0 0 6px; color: #817b72; font-size: 9px; letter-spacing: .2em; }
 	.player-meta h2 { margin: 0; font-size: 20px; font-weight: 500; }
-	.player-duration { color: #d6b37e; font-family: Georgia, serif; font-size: 24px; }
 	@media (max-width: 950px) {
 		.hero { min-height: auto; grid-template-columns: 1fr; padding-top: 15vh; }
 		.hero-stats { margin-top: 30px; }

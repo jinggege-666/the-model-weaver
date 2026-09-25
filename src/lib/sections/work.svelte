@@ -106,7 +106,14 @@
 
 		const savedPosition = Number(sessionStorage.getItem("jinge:work-slider-position"));
 		sessionStorage.removeItem("jinge:work-slider-position");
-		if (Number.isFinite(savedPosition)) {
+		// Phones use the native horizontal scroller. A desktop translate value
+		// left on the list prevents touch scrolling from tracking the finger.
+		if (viewPortState.isMobile) {
+			slider.currentPosition = 0;
+			slider.targetPosition = 0;
+			slider.initialPosition = 0;
+			listContainer.style.transform = "none";
+		} else if (Number.isFinite(savedPosition)) {
 			slider.currentPosition = savedPosition;
 			slider.targetPosition = savedPosition;
 			slider.initialPosition = savedPosition;
@@ -320,6 +327,21 @@
 		width: 100%
 		height: 100%
 		overflow-x: auto
+		overflow-y: hidden
+		overscroll-behavior-x: contain
+		-webkit-overflow-scrolling: touch
+		touch-action: pan-x pan-y
+		scroll-snap-type: x proximity
+		scrollbar-width: none
+
+		&::-webkit-scrollbar
+			display: none
+
+		ul.work-list
+			transform: none !important
+
+			.list-item
+				scroll-snap-align: start
 	
 	*
 		-webkit-touch-callout: none
