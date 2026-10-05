@@ -4,14 +4,15 @@
 	import { fade } from "svelte/transition";
 	import { letterSlideIn, letterSlideOut, maskSlideIn, maskSlideOut, workImageIntro, workListIntro } from "$lib/animations";
 	import { loadPagePromise } from "$lib/store";
-	import { dataState, scrollAnchorState, viewPortState, workScrollState } from "$lib/state.svelte";
-	import { getClientDeviceProfile, loadImage, onScrolledIntoView } from "$lib/utils";
+	import { dataState, scrollAnchorState, workScrollState } from "$lib/state.svelte";
+	import { loadImage, onScrolledIntoView } from "$lib/utils";
 	import { base } from "$app/paths";
 
 
 	let workContainer: HTMLElement;
 	let container: HTMLElement; 
 	let listContainer: HTMLElement; // Containers for Three meshes
+	let nativeScroller: HTMLElement;
 	let images: HTMLImageElement[] = []; // Array of images to be passed to WebGL Shader
 	let workItems: HTMLElement[] = []; // Array of workItems to be animated
 
@@ -24,112 +25,56 @@
 	});
 
 
-	// Slider calculations and rendering
-	class WorkSlider {
+	let pointerDragging = false;
+	let dragStartX = 0;
+	let dragStartScrollLeft = 0;
+	let suppressClick = false;
 
-		currentMouseX = 0; 
-		initialMouseX = 0;
-		currentPosition = 0; 
-		targetPosition = 0; 
-		initialPosition = 0;
-		offsetSpeed = 5000; 
-		lerpSpeed = 0.1;
-
-		onHold = (e: MouseEvent) => {
-			e.preventDefault();
-			if (currentActive >= 0 || workScrollState.active || (e.target! as HTMLElement).classList.contains("button")) return;
-
-			this.initialMouseX = e.clientX;
-			this.currentMouseX = e.clientX;
-			workScrollState.active = true;
-
-			if (workScrollState.active) {
-				const style = window.getComputedStyle(listContainer);
-				const transform = style.transform === "none" ? "matrix(1, 0, 0, 1, 0, 0)" : style.transform;
-				const matrix = new DOMMatrix(transform);
-
-				this.initialPosition = matrix.m41;
-			}
-		}
-
-		onRelease() {
-			workScrollState.active = false;
-		}
-	
-		onMouseMove = (e: MouseEvent) => {
-			e.preventDefault();
-			if (!workScrollState.active) return; 
-			this.currentMouseX = e.clientX;
-
-			let diff = (this.currentMouseX - this.initialMouseX) * -1;
-			this.targetPosition = Math.round((this.initialPosition - (this.offsetSpeed * (diff / document.body.clientWidth))) * 100) / 100;
-		}
-
-		onWheel = (e: WheelEvent) => {
-			if (currentActive >= 0 || viewPortState.isMobile) return;
-			const horizontalDelta = Math.abs(e.deltaX) > Math.abs(e.deltaY)
-				? e.deltaX
-				: (e.shiftKey ? e.deltaY : 0);
-			if (horizontalDelta === 0) return;
-			e.preventDefault();
-			this.targetPosition -= horizontalDelta * 1.25;
-		}
-
-		animate = () => {
-			if (currentActive < 0) {
-				let endPoint = listContainer.offsetWidth - document.body.clientWidth
-				if (endPoint < 0) endPoint = listContainer.offsetWidth;
-
-				// Checks for disabling over-scrolling
-				if (this.targetPosition > 0) this.targetPosition = 0;
-				if (this.targetPosition <= (endPoint * -1)) this.targetPosition = - endPoint;
-			}
-
-			// Lerp easing
-			this.currentPosition = this.lerp(this.currentPosition, this.targetPosition, this.lerpSpeed);
-			
-			workScrollState.speed = Math.round((this.currentPosition - this.targetPosition) * 100) / 100; // Set Svelte Store value for the Canvas effect
-			listContainer.style.transform = `translate3d(${ Math.round(this.currentPosition * 100) / 100 }px, 0px, 0px)`;
-
-			requestAnimationFrame(() => this.animate());
-		}
-
-		lerp(start: number, end: number, t: number) {
-			return start * (1 - t) + end * t;
-		}
+	function pointerStart(event: PointerEvent) {
+		if (event.pointerType === "touch" || event.button !== 0 || currentActive >= 0) return;
+		pointerDragging = true;
+		suppressClick = false;
+		dragStartX = event.clientX;
+		dragStartScrollLeft = nativeScroller.scrollLeft;
+		workScrollState.active = true;
+		nativeScroller.setPointerCapture(event.pointerId);
 	}
 
+	function pointerMove(event: PointerEvent) {
+		if (!pointerDragging) return;
+		const distance = event.clientX - dragStartX;
+		if (Math.abs(distance) > 4) suppressClick = true;
+		nativeScroller.scrollLeft = dragStartScrollLeft - distance;
+		workScrollState.speed = -event.movementX;
+		event.preventDefault();
+	}
 
-	
-	const slider = new WorkSlider();
+	function pointerEnd(event: PointerEvent) {
+		if (!pointerDragging) return;
+		pointerDragging = false;
+		workScrollState.active = false;
+		if (nativeScroller.hasPointerCapture(event.pointerId)) nativeScroller.releasePointerCapture(event.pointerId);
+		setTimeout(() => suppressClick = false, 0);
+	}
+
+	function wheelScroll(event: WheelEvent) {
+		if (!event.shiftKey || Math.abs(event.deltaY) === 0) return;
+		event.preventDefault();
+		nativeScroller.scrollLeft += event.deltaY;
+	}
 
 	onMount(async () => {
 
 		onScrolledIntoView(workContainer, () => inViewResolve(true));
 
-		// Use the lightweight image slider on every device. The previous WebGL
-		// distortion effect added a large download and could race lazy images.
-		viewPortState.isMobile = window.innerWidth <= 950 || getClientDeviceProfile().isTouchFirst;
-
 		await loadPagePromise;
 		scrollAnchorState.work = workContainer;
 
-		const savedPosition = Number(sessionStorage.getItem("jinge:work-slider-position"));
-		sessionStorage.removeItem("jinge:work-slider-position");
-		// Phones use the native horizontal scroller. A desktop translate value
-		// left on the list prevents touch scrolling from tracking the finger.
-		if (viewPortState.isMobile) {
-			slider.currentPosition = 0;
-			slider.targetPosition = 0;
-			slider.initialPosition = 0;
-			listContainer.style.transform = "none";
-		} else if (Number.isFinite(savedPosition)) {
-			slider.currentPosition = savedPosition;
-			slider.targetPosition = savedPosition;
-			slider.initialPosition = savedPosition;
-			listContainer.style.transform = `translate3d(${savedPosition}px, 0px, 0px)`;
-		} else {
-			listContainer.style.transform = "translate3d(0px, 0px, 0px)";
+		const savedPosition = Number(sessionStorage.getItem("jinge:work-scroll-left"));
+		sessionStorage.removeItem("jinge:work-scroll-left");
+		listContainer.style.transform = "none";
+		if (Number.isFinite(savedPosition) && savedPosition > 0) {
+			requestAnimationFrame(() => nativeScroller.scrollLeft = savedPosition);
 		}
 
 	});
@@ -137,7 +82,7 @@
 	// Move slider to active item when it is active
 	function toggleActiveItem(i: number) {
 		currentActive = (currentActive == i) ? -1 : i;
-		if (currentActive >= 0) slider.targetPosition = -(workItems[i].offsetLeft - (window.innerWidth / 4) + window.innerWidth / 10);
+		if (currentActive >= 0) nativeScroller.scrollTo({ left: workItems[i].offsetLeft - window.innerWidth / 4, behavior: "smooth" });
 	}
 
 	function titleSlide(node: HTMLElement) {
@@ -157,19 +102,22 @@
 	<div class="content-wrapper" 
 		role="listbox"
 		tabindex="0"
-		onmousedown={slider.onHold}
-		onmouseup={slider.onRelease}
-		onmouseleave={slider.onRelease}
-		onmousemove={slider.onMouseMove}
-		onwheel={slider.onWheel}
 		bind:this={container}
 		class:disabled={currentActive >= 0}
-		use:workListIntro={{ promise: inViewPromise, onComplete: async () => {
-			 // Begin slider animations and effects once slider is animated in and if device is not a phone
-			if (!viewPortState.isMobile) slider.animate();
-		} }}
+		use:workListIntro={{ promise: inViewPromise }}
 	>
-		<div class:mobile={viewPortState.isMobile}>
+		<div
+			class="mobile native-scroller"
+			role="region"
+			aria-label="作品横向滑动列表"
+			class:pointer-dragging={pointerDragging}
+			bind:this={nativeScroller}
+			onpointerdown={pointerStart}
+			onpointermove={pointerMove}
+			onpointerup={pointerEnd}
+			onpointercancel={pointerEnd}
+			onwheel={wheelScroll}
+		>
 			<ul class="work-list" 
 				bind:this={listContainer} 
 				class:hold={workScrollState.active}>
@@ -218,7 +166,14 @@
 									<a
 										class="button item-link interactive"
 										href={item.links[0].link.startsWith("http") ? item.links[0].link : base + item.links[0].link}
-										onclick={() => sessionStorage.setItem("jinge:work-slider-position", String(slider.currentPosition))}
+									onclick={(event) => {
+										if (suppressClick) {
+											event.preventDefault();
+											event.stopPropagation();
+											return;
+										}
+										sessionStorage.setItem("jinge:work-scroll-left", String(nativeScroller.scrollLeft));
+									}}
 										target={item.links[0].link.startsWith("http") ? "_blank" : "_self"}
 										data-sveltekit-preload-data="tap"
 										in:maskSlideIn={{
@@ -344,6 +299,11 @@
 		touch-action: pan-x pan-y
 		scroll-snap-type: x proximity
 		scrollbar-width: none
+		cursor: grab
+
+		&.pointer-dragging
+			cursor: grabbing
+			scroll-snap-type: none
 
 		&::-webkit-scrollbar
 			display: none
@@ -550,6 +510,9 @@
 		opacity: 1
 		transition: opacity 0.5s ease
 		-webkit-transition: opacity 0.5s ease
+
+		> li
+			flex: 0 0 auto
 
 		&.hold
 			.list-item
