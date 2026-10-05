@@ -500,7 +500,9 @@
 	ul.work-list
 		margin-top: auto
 		margin: auto 0
-		padding: 0 5vw
+		// Keep enough trailing runway for the fourth card and its right-aligned
+		// title/link to move fully inside the viewport at the scroll boundary.
+		padding: 0 22vw 0 5vw
 		list-style-type: none
 		display: flex
 		flex-direction: row
