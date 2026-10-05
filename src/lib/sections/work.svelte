@@ -5,7 +5,7 @@
 	import { letterSlideIn, letterSlideOut, maskSlideIn, maskSlideOut, workImageIntro, workListIntro } from "$lib/animations";
 	import { loadPagePromise } from "$lib/store";
 	import { dataState, scrollAnchorState, viewPortState, workScrollState } from "$lib/state.svelte";
-	import { loadImage, onScrolledIntoView } from "$lib/utils";
+	import { getClientDeviceProfile, loadImage, onScrolledIntoView } from "$lib/utils";
 	import { base } from "$app/paths";
 
 
@@ -65,6 +65,16 @@
 			this.targetPosition = Math.round((this.initialPosition - (this.offsetSpeed * (diff / document.body.clientWidth))) * 100) / 100;
 		}
 
+		onWheel = (e: WheelEvent) => {
+			if (currentActive >= 0 || viewPortState.isMobile) return;
+			const horizontalDelta = Math.abs(e.deltaX) > Math.abs(e.deltaY)
+				? e.deltaX
+				: (e.shiftKey ? e.deltaY : 0);
+			if (horizontalDelta === 0) return;
+			e.preventDefault();
+			this.targetPosition -= horizontalDelta * 1.25;
+		}
+
 		animate = () => {
 			if (currentActive < 0) {
 				let endPoint = listContainer.offsetWidth - document.body.clientWidth
@@ -99,7 +109,7 @@
 
 		// Use the lightweight image slider on every device. The previous WebGL
 		// distortion effect added a large download and could race lazy images.
-		viewPortState.isMobile = window.innerWidth <= 950 || navigator.maxTouchPoints > 0 || window.matchMedia("(pointer: coarse)").matches;
+		viewPortState.isMobile = window.innerWidth <= 950 || getClientDeviceProfile().isTouchFirst;
 
 		await loadPagePromise;
 		scrollAnchorState.work = workContainer;
@@ -151,6 +161,7 @@
 		onmouseup={slider.onRelease}
 		onmouseleave={slider.onRelease}
 		onmousemove={slider.onMouseMove}
+		onwheel={slider.onWheel}
 		bind:this={container}
 		class:disabled={currentActive >= 0}
 		use:workListIntro={{ promise: inViewPromise, onComplete: async () => {

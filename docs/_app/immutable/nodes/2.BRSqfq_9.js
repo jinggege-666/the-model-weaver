@@ -1,1 +1,0 @@
-import{nt as e}from"../chunks/C4P6BUEI.js";import{t}from"../chunks/q_rDtgzR.js";var n=e({ssr:()=>!1});export{t as component,n as universal};

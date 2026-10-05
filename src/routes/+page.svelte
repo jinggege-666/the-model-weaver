@@ -5,7 +5,7 @@
 	import { beforeNavigate } from "$app/navigation";
 	import { rememberReturn } from "$lib/return-navigation";
 	import { loadPageResolve } from "$lib/store";
-	import { devMsg } from "$lib/utils";
+	import { devMsg, getClientDeviceProfile } from "$lib/utils";
 	import workData from "../../static/data/work-data.json";
 	import siteData from "../../static/data/data.json";
 	import type { WorkData } from "$lib/types";
@@ -27,8 +27,9 @@
 	});
 
 	onMount(async () => {
-		const isTouchDevice = navigator.maxTouchPoints > 0 || window.matchMedia("(pointer: coarse)").matches;
-		const isTouchTablet = isTouchDevice && window.innerWidth > 750;
+		const { isIPad, isTouchFirst } = getClientDeviceProfile();
+		const isTouchDevice = isTouchFirst;
+		const isTouchTablet = isIPad || (isTouchFirst && window.innerWidth > 750);
 		document.documentElement.classList.toggle("touch-device", isTouchDevice);
 		document.documentElement.classList.toggle("touch-tablet", isTouchTablet);
 		viewPortState.isMobile = isTouchDevice || window.innerWidth <= 950;

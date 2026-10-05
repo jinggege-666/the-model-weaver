@@ -34,3 +34,15 @@ export function devMsg() {
     console.log("%cInterested in how this site works?", css + "color: #22c55e;")
     console.log("%cCheck out the source code: https://github.com/Musab-Hassan/musabhassan.com", css);
 }
+
+export function getClientDeviceProfile() {
+    const userAgent = navigator.userAgent || "";
+    const isIPad = /iPad/i.test(userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const isPhone = /iPhone|iPod|Android.+Mobile|Windows Phone/i.test(userAgent);
+    const isAndroidTablet = /Android/i.test(userAgent) && !/Mobile/i.test(userAgent);
+
+    return {
+        isIPad,
+        isTouchFirst: isIPad || isPhone || isAndroidTablet
+    };
+}

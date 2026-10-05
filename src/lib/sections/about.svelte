@@ -4,12 +4,11 @@
 	import { loadPagePromise } from "$lib/store";
 	import { letterSlideIn, maskSlideIn } from "$lib/animations";
 	import { loadImage, onScrolledIntoView } from "$lib/utils";
-    import { scrollAnchorState, viewPortState } from "$lib/state.svelte";
+    import { scrollAnchorState } from "$lib/state.svelte";
 	import { base } from "$app/paths";
 
 	let section1Element: HTMLElement;
 	let section2Element: HTMLElement;
-	let profilePicContainer: HTMLElement;
 
 	// Promise which when resolved will trigger svelte animations
 	let sectionOneResolve: (value?: any) => void;
@@ -23,11 +22,6 @@
 		// Set navbar about link's y location to top of aboutContainer
 		scrollAnchorState.about = section1Element;
 
-		viewPortState.slickscrollInstance.addOffset({
-			element: profilePicContainer!,
-			speedY: 0.8
-		});
-
 		onScrolledIntoView(section1Element, () => sectionOneResolve(true));
 		onScrolledIntoView(section2Element, () => sectionTwoResolve(true));
 	});
@@ -35,14 +29,6 @@
 	function titleIn(node: HTMLElement) {
 		const titleAnimation = letterSlideIn(node, { delay: 15 });
 		titleAnimation.anime();
-	}
-
-	// Add parallax scrolling offsets to slickScroll
-	function addSlickScrollOffset(node: HTMLElement) {
-		viewPortState.slickscrollInstance.addOffset({
-			element: node,
-			speedY: 0.8
-		});
 	}
 
 </script>
@@ -67,7 +53,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="profile-image" use:addSlickScrollOffset>
+		<div class="profile-image">
 			{#await loadImage("assets/imgs/profile-photo.jpg") then src}
 				<img src="{src}" loading="lazy" decoding="async" in:maskSlideIn={{ duration: 1200,
 					delay: 100,
@@ -160,15 +146,17 @@
 
 	.profile-image
 		width: 55%
+		height: min(72vh, 760px)
 		overflow: hidden
 		margin-top: -40vh
 		position: relative
 
 		img
-			height: 80%
-			width: 90%
+			height: 100%
+			width: 100%
 			border-radius: 0.5vh
 			object-fit: cover
+			object-position: center top
 
 	.content-wrapper
 		box-sizing: border-box
@@ -267,6 +255,7 @@
 		.profile-image
 			display: block
 			width: 100%
+			height: auto
 			margin: 6vh 0 0
 			position: relative
 			transform: none !important
@@ -277,6 +266,7 @@
 				width: 100%
 				height: auto
 				object-fit: contain
+				object-position: center
 				border-radius: 1vh
 
 .horizontal-flex
