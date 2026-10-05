@@ -1,7 +1,6 @@
 <script lang="ts">
 
 	import { animate, stagger } from "animejs";
-	import { base } from "$app/paths";
 	import { onMount } from "svelte";
 	import { loadPagePromise } from "$lib/store";
 	import { loadImage } from "$lib/utils";
@@ -10,15 +9,7 @@
 	// DOM Node Binds for animations
 	let homeContainerElement: HTMLElement = $state()!; // Container
 	let backgroundContainerElement: HTMLElement = $state()!;
-	let backgroundImageElement: HTMLElement = $state()!; // Visual offset wrapper
-	let heroVideoElement: HTMLVideoElement = $state()!;
-	let heroVideoNeedsTap = $state(false);
-	const mobilePlaybackAttributes = {
-		"webkit-playsinline": "true",
-		"x5-playsinline": "true",
-		"x5-video-player-type": "h5-page",
-		"x5-video-player-fullscreen": "false"
-	};
+	let backgroundImageElement: HTMLElement = $state()!;
 
 	// Elements for animations
 	let titleWord1Element: HTMLElement = $state()!; 
@@ -33,32 +24,6 @@
 	let signaturePath4: SVGPathElement = $state()!;
 
 	onMount(() => {
-		const playHeroVideo = async () => {
-			if (window.matchMedia("(max-width: 750px), (hover: none) and (pointer: coarse)").matches) {
-				heroVideoNeedsTap = false;
-				return;
-			}
-			if (!heroVideoElement) return;
-			heroVideoElement.muted = true;
-			heroVideoElement.defaultMuted = true;
-			try {
-				await heroVideoElement.play();
-				heroVideoNeedsTap = false;
-			} catch {
-				heroVideoNeedsTap = true;
-			}
-		};
-
-		void playHeroVideo();
-		heroVideoElement.addEventListener("loadeddata", playHeroVideo);
-		heroVideoElement.addEventListener("canplay", playHeroVideo);
-		const resumeAfterVisibilityChange = () => {
-			if (!document.hidden) void playHeroVideo();
-		};
-		const resumeAfterPageShow = () => void playHeroVideo();
-		document.addEventListener("visibilitychange", resumeAfterVisibilityChange);
-		window.addEventListener("pageshow", resumeAfterPageShow);
-
 		void loadPagePromise.then(() => {
 			// Set navbar home link's y location to top of homeContainer
 			scrollAnchorState.home = homeContainerElement;
@@ -71,13 +36,6 @@
 
 			introAnimations();
 		});
-
-		return () => {
-			heroVideoElement?.removeEventListener("loadeddata", playHeroVideo);
-			heroVideoElement?.removeEventListener("canplay", playHeroVideo);
-			document.removeEventListener("visibilitychange", resumeAfterVisibilityChange);
-			window.removeEventListener("pageshow", resumeAfterPageShow);
-		};
 	})
 
 
@@ -219,39 +177,9 @@
 			</div>
 
 			<div class="parallax-wrapper home-back" bind:this={backgroundContainerElement}>
-				<div class="home-media" bind:this={backgroundImageElement}>
-					<video
-						class="home-image desktop-motion"
-						poster={`${base}/assets/imgs/home-hero-kling-poster.jpg`}
-						autoplay
-						muted
-						loop
-						playsinline
-						{...mobilePlaybackAttributes}
-						preload="auto"
-						disablepictureinpicture
-						onplay={() => heroVideoNeedsTap = false}
-						bind:this={heroVideoElement}
-						aria-label="Jinge portrait hero background"
-					>
-						<source src={`${base}/assets/video/home-hero-kling-loop.mp4`} type="video/mp4" />
-					</video>
-					<img
-						class="home-image mobile-motion"
-						src={`${base}/assets/imgs/home-hero-kling-loop-mobile.webp`}
-						alt="Jinge portrait hero motion"
-					/>
-					<img
-						class="home-image ipad-motion"
-						src={`${base}/assets/imgs/home-hero-kling-loop-ipad.gif`}
-						alt="Jinge portrait hero motion"
-					/>
-				</div>
-				{#if heroVideoNeedsTap}
-					<button class="hero-video-play" type="button" onclick={() => heroVideoElement?.play()} aria-label="播放封面动效">
-						<span>▶</span> 轻触播放动效
-					</button>
-				{/if}
+				{#await loadImage("assets/imgs/home-back.jpg") then src}
+					<img class="home-image" src={src} bind:this={backgroundImageElement} draggable="false" alt="Home Background" />
+				{/await}
 			</div>
 		</div>
 	</div>
@@ -369,10 +297,6 @@
 			&
 				opacity: 0.3
 
-		.home-media
-			height: 100%
-			width: 100%
-
 		.home-image
 			display: block
 			height: 100%
@@ -381,25 +305,6 @@
 			object-position: center center
 			border-radius: 1.5vh
 
-		.mobile-motion
-			display: none
-
-		.ipad-motion
-			display: none
-
-		.hero-video-play
-			position: absolute
-			left: 50%
-			bottom: 1.5rem
-			transform: translateX(-50%)
-			z-index: 3
-			border: 1px solid rgba(255,255,255,.55)
-			border-radius: 999px
-			padding: .65rem 1rem
-			background: rgba(0,0,0,.55)
-			color: white
-			font: inherit
-			white-space: nowrap
 
 @media only screen and (min-width: 1250px)
 	.h-signature
@@ -435,20 +340,7 @@
 		width: 100% !important
 		margin-left: 0 !important
 
-// Phones use animated WebP; iPad gets a GIF fallback for older Safari/WebKit.
 @media only screen and (max-width: 750px)
-	.desktop-motion
-		display: none !important
-
-	.mobile-motion
-		display: block !important
-
-	.ipad-motion
-		display: none !important
-
-	.home-image
-		object-position: 30% center !important
-
 	.occupation
 		width: 100%
 		overflow: visible !important
@@ -459,14 +351,6 @@
 			white-space: normal
 			font-size: clamp(14px, 3.8vw, 17px) !important
 			line-height: 1.5 !important
-
-:global(.touch-tablet) .desktop-motion,
-:global(.touch-tablet) .mobile-motion
-	display: none !important
-
-:global(.touch-tablet) .ipad-motion
-	display: block !important
-	object-position: 30% center !important
 
 @media only screen and (min-width: 751px) and (max-height: 650px)
 	#content-container
