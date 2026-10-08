@@ -75,25 +75,10 @@
 							<img src={base + item.poster} alt={item.title} loading={index === 0 ? "eager" : "lazy"} decoding="async" />
 							<span class="play" aria-hidden="true">▶</span>
 						</button>
-						<div class="card-meta">
-							<span class="number">{String(index + 1).padStart(2, "0")}</span>
-							<div>
-								<h3>{item.title}</h3>
-								<p>{item.subtitle}</p>
-							</div>
-						</div>
 					</article>
 				{/each}
 			</div>
 
-			<div class="credits" aria-label="视频来源与许可">
-				<p class="credit-title">CREDITS / LICENSES</p>
-				<p>OWL AND BADGER · Google DeepMind · Public Domain（按源文件标注）· 网页转码与 JINGE 水印</p>
-				<p>VEO3 CHERNOBYL DECAYING ROOM · Global Donald · <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noreferrer">CC0</a> · 网页转码与 JINGE 水印</p>
-				<p>EXECUTE · Vincent Chang Deng · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noreferrer">CC BY 3.0</a> · 分章、网页转码与 JINGE 水印</p>
-				<p>WITCHES WOOD · Vortex Project Studios · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noreferrer">CC BY 3.0</a> · 网页转码与 JINGE 水印</p>
-				<p>FIRST CANVAS · Moncho Concha · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noreferrer">CC BY 3.0</a> · 分章、网页转码与 JINGE 水印</p>
-			</div>
 		</section>
 	</main>
 </div>
@@ -105,9 +90,6 @@
 			<video controls autoplay playsinline preload="auto" poster={base + activeVideo.poster}>
 				<source src={base + activeVideoSource} type="video/mp4" />
 			</video>
-			<div class="player-meta">
-				<div><p>NOW PLAYING</p><h2>{activeVideo.title}</h2></div>
-			</div>
 		</div>
 	</div>
 {/if}
@@ -138,21 +120,10 @@
 	.poster-button:hover img { transform: scale(1.035); filter: brightness(.7); }
 	.play { position: absolute; inset: 50% auto auto 50%; display: grid; width: 58px; height: 58px; place-items: center; border: 1px solid rgba(255,255,255,.55); border-radius: 50%; color: white; background: rgba(10,10,12,.32); transform: translate(-50%,-50%); opacity: 0; transition: opacity .35s ease, transform .35s ease; backdrop-filter: blur(8px); }
 	.poster-button:hover .play, .poster-button:focus-visible .play { opacity: 1; transform: translate(-50%,-50%) scale(1.05); }
-	.card-meta { display: grid; grid-template-columns: 32px 1fr; gap: 12px; align-items: start; padding-top: 16px; }
-	.number { color: #706d67; font-family: Georgia, serif; font-size: 13px; }
-	.card-meta h3 { margin: 0 0 7px; color: #eee9df; font-size: 16px; font-weight: 500; }
-	.card-meta p { margin: 0; color: #7f7b74; font-size: 12px; }
-	.credits { margin: 64px 0 0; color: #64615d; font-size: 12px; line-height: 1.7; }
-	.credits p { margin: 5px 0; }
-	.credits .credit-title { margin-bottom: 14px; color: #91897f; font-size: 10px; letter-spacing: .18em; }
-	.credits a { color: #8b857c; text-underline-offset: 3px; }
 	.player-backdrop { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 24px; background: rgba(0,0,0,.88); backdrop-filter: blur(16px); }
 	.player-dialog { position: relative; width: min(1100px, 100%); background: #111114; box-shadow: 0 25px 100px rgba(0,0,0,.6); }
 	.player-dialog video { display: block; width: 100%; max-height: 72vh; background: black; }
 	.close-player { position: absolute; z-index: 2; top: -46px; right: 0; border: 0; color: white; background: transparent; font-size: 34px; font-weight: 200; cursor: pointer; }
-	.player-meta { display: flex; align-items: center; justify-content: flex-start; gap: 24px; padding: 22px 26px; }
-	.player-meta p { margin: 0 0 6px; color: #817b72; font-size: 9px; letter-spacing: .2em; }
-	.player-meta h2 { margin: 0; font-size: 20px; font-weight: 500; }
 	@media (max-width: 950px) {
 		.back { position: static; display: block; width: fit-content; margin: 0 0 18px; }
 	}
@@ -166,7 +137,5 @@
 		.video-grid { grid-template-columns: 1fr; gap: 42px; }
 		.play { opacity: 1; width: 50px; height: 50px; }
 		.player-backdrop { padding: 12px; }
-		.player-meta { padding: 16px; }
-		.player-meta h2 { font-size: 16px; }
 	}
 </style>

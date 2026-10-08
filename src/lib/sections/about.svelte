@@ -31,6 +31,30 @@
 		titleAnimation.anime();
 	}
 
+	function portraitParallax(node: HTMLElement) {
+		const scroller = document.getElementById("scroll-frame");
+		let frame = 0;
+		const update = () => {
+			frame = 0;
+			if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+				node.style.transform = "none";
+				return;
+			}
+			const rect = section1Element.getBoundingClientRect();
+			const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
+			node.style.transform = `translate3d(0, ${(progress - 0.5) * 80}px, 0)`;
+		};
+		const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+		scroller?.addEventListener("scroll", schedule, { passive: true });
+		window.addEventListener("resize", schedule);
+		schedule();
+		return { destroy() {
+			scroller?.removeEventListener("scroll", schedule);
+			window.removeEventListener("resize", schedule);
+			cancelAnimationFrame(frame);
+		} };
+	}
+
 </script>
 
 <div id="content-container" class="about" bind:this={section1Element}>
@@ -53,7 +77,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="profile-image">
+		<div class="profile-image" use:portraitParallax>
 			{#await loadImage("assets/imgs/profile-photo.jpg") then src}
 				<img src="{src}" loading="lazy" decoding="async" in:maskSlideIn={{ duration: 1200,
 					delay: 100,
@@ -138,7 +162,7 @@
 	display: flex
 	flex-direction: row
 	justify-content: space-between
-	overflow: hidden
+	overflow: visible
 	padding: 0 5vw
 	margin-top: 40vh
 	position: relative
@@ -260,7 +284,6 @@
 			height: auto
 			margin: 6vh 0 0
 			position: relative
-			transform: none !important
 			overflow: hidden
 
 			img
