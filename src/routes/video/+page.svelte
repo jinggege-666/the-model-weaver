@@ -65,7 +65,7 @@
 					<p class="section-index">SELECTED FILMS · 2026</p>
 					<h2 id="collection-title">精选视频</h2>
 				</div>
-				<p class="chapter-count">05 部作品 · 10 个播放单元 · 19'</p>
+				<p class="chapter-count">04 部作品 · 07 个播放单元 · 11'</p>
 			</div>
 
 			<div class="video-grid">

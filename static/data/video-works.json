@@ -61,32 +61,5 @@
     "video": "/videos/witches-wood/witches-wood.mp4",
     "mobile_video": "/videos/witches-wood/witches-wood-mobile.mp4",
     "poster": "/videos/witches-wood/witches-wood.webp"
-  },
-  {
-    "id": "execute-01",
-    "title": "EXECUTE · 第一章",
-    "subtitle": "Vincent Chang Deng · 00:00–02:29",
-    "duration_seconds": 149.23,
-    "video": "/videos/execute/part-01.mp4",
-    "mobile_video": "/videos/execute/part-01-mobile.mp4",
-    "poster": "/videos/execute/part-01.webp"
-  },
-  {
-    "id": "execute-02",
-    "title": "EXECUTE · 第二章",
-    "subtitle": "Vincent Chang Deng · 02:29–05:02",
-    "duration_seconds": 152.63,
-    "video": "/videos/execute/part-02.mp4",
-    "mobile_video": "/videos/execute/part-02-mobile.mp4",
-    "poster": "/videos/execute/part-02.webp"
-  },
-  {
-    "id": "execute-03",
-    "title": "EXECUTE · 第三章",
-    "subtitle": "Vincent Chang Deng · 05:02–07:22",
-    "duration_seconds": 139.93,
-    "video": "/videos/execute/part-03.mp4",
-    "mobile_video": "/videos/execute/part-03-mobile.mp4",
-    "poster": "/videos/execute/part-03.webp"
   }
 ]
