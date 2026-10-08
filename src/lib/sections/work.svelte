@@ -28,7 +28,6 @@
 	let pointerDragging = false;
 	let dragStartX = 0;
 	let dragStartScrollLeft = 0;
-	let suppressClick = false;
 
 	function pointerStart(event: PointerEvent) {
 		// Links and buttons must remain ordinary clicks. Dragging starts only on
@@ -36,7 +35,6 @@
 		const target = event.target as Element | null;
 		if (target?.closest("a, button") || event.pointerType === "touch" || event.button !== 0 || currentActive >= 0) return;
 		pointerDragging = true;
-		suppressClick = false;
 		dragStartX = event.clientX;
 		dragStartScrollLeft = nativeScroller.scrollLeft;
 		workScrollState.active = true;
@@ -46,7 +44,6 @@
 	function pointerMove(event: PointerEvent) {
 		if (!pointerDragging) return;
 		const distance = event.clientX - dragStartX;
-		if (Math.abs(distance) > 10) suppressClick = true;
 		nativeScroller.scrollLeft = dragStartScrollLeft - distance;
 		workScrollState.speed = -event.movementX;
 		event.preventDefault();
@@ -57,7 +54,6 @@
 		pointerDragging = false;
 		workScrollState.active = false;
 		if (nativeScroller.hasPointerCapture(event.pointerId)) nativeScroller.releasePointerCapture(event.pointerId);
-		setTimeout(() => suppressClick = false, 0);
 	}
 
 	function wheelScroll(event: WheelEvent) {
@@ -169,12 +165,7 @@
 									<a
 										class="button item-link interactive"
 										href={item.links[0].link.startsWith("http") ? item.links[0].link : base + item.links[0].link}
-									onclick={(event) => {
-										if (suppressClick) {
-											event.preventDefault();
-											event.stopPropagation();
-											return;
-										}
+									onclick={() => {
 										sessionStorage.setItem("jinge:work-scroll-left", String(nativeScroller.scrollLeft));
 									}}
 										target={item.links[0].link.startsWith("http") ? "_blank" : "_self"}
