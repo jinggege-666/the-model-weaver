@@ -7,6 +7,7 @@
 	import { dataState, scrollAnchorState, workScrollState } from "$lib/state.svelte";
 	import { loadImage, onScrolledIntoView } from "$lib/utils";
 	import { base } from "$app/paths";
+	import { goto } from "$app/navigation";
 
 
 	let workContainer: HTMLElement;
@@ -60,6 +61,17 @@
 		if (!event.shiftKey || Math.abs(event.deltaY) === 0) return;
 		event.preventDefault();
 		nativeScroller.scrollLeft += event.deltaY;
+	}
+
+	function openWorkLink(event: MouseEvent, link: string) {
+		sessionStorage.setItem("jinge:work-scroll-left", String(nativeScroller.scrollLeft));
+		if (link.startsWith("http")) return;
+
+		// Navigate explicitly. The horizontal drag surface can otherwise consume a
+		// pointer click before SvelteKit's delegated link handler sees it.
+		event.preventDefault();
+		event.stopPropagation();
+		void goto(base + link);
 	}
 
 	onMount(async () => {
@@ -163,11 +175,11 @@
 									</h1>
 
 									<a
-										class="button item-link interactive"
-										href={item.links[0].link.startsWith("http") ? item.links[0].link : base + item.links[0].link}
-									onclick={() => {
-										sessionStorage.setItem("jinge:work-scroll-left", String(nativeScroller.scrollLeft));
-									}}
+									class="button item-link interactive"
+									href={item.links[0].link.startsWith("http") ? item.links[0].link : base + item.links[0].link}
+									onpointerdown={(event) => event.stopPropagation()}
+									onpointerup={(event) => event.stopPropagation()}
+									onclick={(event) => openWorkLink(event, item.links[0].link)}
 										target={item.links[0].link.startsWith("http") ? "_blank" : "_self"}
 										data-sveltekit-preload-data="tap"
 										in:maskSlideIn={{
