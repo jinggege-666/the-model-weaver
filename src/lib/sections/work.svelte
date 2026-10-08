@@ -31,7 +31,10 @@
 	let suppressClick = false;
 
 	function pointerStart(event: PointerEvent) {
-		if (event.pointerType === "touch" || event.button !== 0 || currentActive >= 0) return;
+		// Links and buttons must remain ordinary clicks. Dragging starts only on
+		// the card surface, otherwise tiny mouse movement can swallow navigation.
+		const target = event.target as Element | null;
+		if (target?.closest("a, button") || event.pointerType === "touch" || event.button !== 0 || currentActive >= 0) return;
 		pointerDragging = true;
 		suppressClick = false;
 		dragStartX = event.clientX;
@@ -43,7 +46,7 @@
 	function pointerMove(event: PointerEvent) {
 		if (!pointerDragging) return;
 		const distance = event.clientX - dragStartX;
-		if (Math.abs(distance) > 4) suppressClick = true;
+		if (Math.abs(distance) > 10) suppressClick = true;
 		nativeScroller.scrollLeft = dragStartScrollLeft - distance;
 		workScrollState.speed = -event.movementX;
 		event.preventDefault();

@@ -148,7 +148,9 @@
 		width: 55%
 		height: min(72vh, 760px)
 		overflow: hidden
-		margin-top: -40vh
+		// Keep the portrait inside the section; the former negative margin moved
+		// the head above this section's clipped boundary on desktop.
+		margin-top: 0
 		position: relative
 
 		img
